@@ -244,23 +244,94 @@ public class GameWindow extends WindowAdapter{
     /**
      * This initialises level selection.
      */
-    private void initialiseLevelSelection() {
+     private void initialiseLevelSelection() {
         levelSelection.setSize(WDWWIDTH, WDWHEIGHT);
-        
-        JLabel lblLevel = new JLabel("Select Difficulty");
-        lblLevel.setFont(new Font("Copperplate", Font.PLAIN, 40));
-        lblLevel.setForeground(Color.WHITE);
-        lblLevel.setBounds(70, 25, LBLWIDTH, LBLHEIGHT);
-        levelSelection.add(lblLevel);
         levelSelection.setBackground(Color.DARK_GRAY);
+        
+        JLabel title = LabelForSelection("Choice selection",100,25,40);
+        levelSelection.add(title);
+        
+        
+        JLabel level = LabelForSelection("Level:",80,95,20);
+        levelSelection.add(level);
+
+        
+        JLabel musicSwitch = LabelForSelection("Music on/off:",80,150,20);
+        levelSelection.add(musicSwitch);
+        
+        JLabel musicSelect = LabelForSelection("Select Music:",80,210,20);
+        levelSelection.add(musicSelect);
         
         JComboBox<String> comboBox = new JComboBox<String>();
         comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Normal", "Heroic", "Legendary"}));
-        comboBox.setBounds(200, 150, BTNWIDTH, BTNHEIGHT);
+        comboBox.setBounds(200, 100, BTNWIDTH, BTNHEIGHT);
         levelSelection.add(comboBox);
         
         JButton btnGo = initMenuButton(GO, 200, 280, "G", "ENTER");
         levelSelection.add(btnGo);
+        
+      //making the radio Button and the confirm button
+        ButtonGroup  c =new ButtonGroup ();
+        JRadioButton c1 = new JRadioButton("on");
+        JRadioButton c2= new JRadioButton("off");
+        c.add(c1);
+        c.add(c2);
+        levelSelection.add(c1);
+        levelSelection.add(c2);
+        c1.setName("on");
+        c2.setName("off");   
+        c1.setBounds(200, 150, BTNWIDTH, BTNHEIGHT);
+        c2.setBounds(200, 180, BTNWIDTH, BTNHEIGHT);
+        c1.setBackground(Color.DARK_GRAY);
+        c1.setForeground(Color.WHITE);
+        c2.setBackground(Color.DARK_GRAY);
+        c2.setForeground(Color.WHITE);
+		
+        //making a ComboBox to select the songs
+		JComboBox<String> musicComboBox = new JComboBox<String>();
+		musicComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"------","song1", "song2", "song3"}));
+		musicComboBox.setBounds(200, 220,  BTNWIDTH, BTNHEIGHT);
+		levelSelection.add(musicComboBox);    
+        
+		musicComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(comboBox.getSelectedItem() == "song1"){
+					bgm = loadBGM ("bgm1.wav");
+					System.out.println("You selected song1");
+				}else if(comboBox.getSelectedItem() == "song2"){
+					bgm = loadBGM ("bgm2.wav");
+					System.out.println("You selected song2");
+				} else {
+					bgm = loadBGM ("bgm3.wav");
+					System.out.println("You selected song3");
+				}
+			}
+		});
+       
+		btnGo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(c1.isSelected()){
+					System.out.println("music on");
+					bgm.loop();
+				}else if(c2.isSelected()){
+					System.out.println("music off");
+					bgm.stop();
+				}
+			}
+		});
+    }
+    
+    /**
+     * Label for initialiseLevelSelection window
+     */
+    public JLabel LabelForSelection(String LabelName,int x,int y,int size){
+    	 JLabel newLabel = new JLabel(LabelName);
+    	 newLabel.setFont(new Font("Copperplate", Font.PLAIN, size));
+    	 newLabel.setForeground(Color.WHITE);
+    	 newLabel.setBounds(x, y, LBLWIDTH, LBLHEIGHT);
+		 
+    	 return newLabel;
     }
     
     /**
