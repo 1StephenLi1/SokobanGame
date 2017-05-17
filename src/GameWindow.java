@@ -1,21 +1,13 @@
 import java.awt.Font;
-import java.applet.AudioClip;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -23,8 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 
 /**
@@ -62,13 +54,7 @@ public class GameWindow extends WindowAdapter{
         SELECT = "SELECT",
         START = "START",
         QUIT = "QUIT",
-        GO = "GO",
-        /*
-		MUSIC_ON= "MUSIC ON",
-    	MUSIC_OFF="MUSIC OFF",
-    	MUSIC_SWITCH = "MUSIC SWITCH",
-    	*/
-    	MUSIC= "MUSIC";
+        GO = "GO";
     
     /** The frame. */
     private JFrame frame;
@@ -87,17 +73,7 @@ public class GameWindow extends WindowAdapter{
     
     /** The level. */
     protected JPanel level;
-	
-    /** The background Music. */
-	private AudioClip bgm; 
-	
-	private ArrayList<ImageIcon> images;
-	private final int BOX = 0;
-	private final int GOAL = 1;
-	private final int PLAYER = 2;
-	private final int WALL = 3;
-
-	
+    
     /**
      * This creates an empty game window, that the game will present in.
      * It defaults to being placed in the centre of the screen.
@@ -105,7 +81,6 @@ public class GameWindow extends WindowAdapter{
      * It is not visible when created, and must be turned on later!
      */
     public GameWindow() {
-    	loadAssets();
         frame = new JFrame();
         //frame.setLayout(null); //Means we set coordinates ourselves i.e. no auto layout => more control
         frame.setSize(WDWWIDTH, WDWHEIGHT); //set frame size to specified width and height
@@ -132,13 +107,6 @@ public class GameWindow extends WindowAdapter{
         frame.setVisible(true);
     }
     
-    public void loadAssets() {
-    	images = new ArrayList<>();
-    	images.add(new ImageIcon("box.png"));
-    	images.add(new ImageIcon("goal.png"));
-    	images.add(new ImageIcon("player.png"));
-    	images.add(new ImageIcon("wall.png"));
-    }
     /**
      * This is just a container for an action, to obtain the focus of a button.
      */
@@ -206,12 +174,8 @@ public class GameWindow extends WindowAdapter{
                 frame.setSize(WDWWIDTH,WDWHEIGHT);
                 frame.setLocationRelativeTo(null);
                 cl.show(panelCards, "3");
-            } else if (temp.getName().equals(MUSIC)){
-				CheckMusicWindow();
             }
-     	   
         }
-        
     }
     
     /**
@@ -225,10 +189,7 @@ public class GameWindow extends WindowAdapter{
         
         JButton quit = initMenuButton(QUIT, 260, 390, "Q", "ENTER");
         menu.add(quit);
-		
-        JButton musicSetting = initMenuButton(MUSIC,385,0,"S","ENTER");
-        menu.add(musicSetting);
-       
+        
         JLabel label = new JLabel("Warehouse Bros!");
         label.setFont(new Font("Copperplate", Font.PLAIN, 40));
         label.setBounds(70, 50, LBLWIDTH, LBLHEIGHT);
@@ -338,13 +299,13 @@ public class GameWindow extends WindowAdapter{
                 if (map[i][j] == null)
                     continue;
                 if (map[i][j].getType()=='B') {
-                    initToken(j, i, BOX);
+                    initToken(j, i, dimension,"box.png");
                 } else if (map[i][j].getType()=='W') {
-                    initToken(j, i, WALL);
+                    initToken(j, i, dimension,"wall.png");
                 } else if (map[i][j].getType()=='P') {
-                    initToken(j, i, PLAYER);
+                    initToken(j, i, dimension,"player.png");
                 } else if (map[i][j].getType()=='G') {
-                    initToken(j, i, GOAL);
+                    initToken(j, i, dimension,"goal.png");
                 }
             }
         }
@@ -358,13 +319,16 @@ public class GameWindow extends WindowAdapter{
      * @param gw the GameWindow on which the token is to be drawn
      * @param x the x coordinate where the token is to be placed
      * @param y the y coordinate where the token is to be placed
+     * @param dimension  the size of a map
      * @param fileName the file name
      */
-    public void initToken(int x, int y, int fileName) {
-        JLabel box = new JLabel();
-        box.setIcon(images.get(fileName));
-        box.setBounds(x,y,29,29);
-        box.setLocation((x+1)*40+50,(y+1)*40+50);
+    public void initToken(int x, int y, int dimension, String fileName) {
+        int sizeOfIcon = 29; //size of images
+        int midPosition = this.WDWWIDTH/2;	//mid position of our game window 
+        int startPosition = midPosition - ((dimension/2)+1)*sizeOfIcon;  //position to start drawing 
+    	JLabel box = new JLabel();
+        box.setIcon(new ImageIcon(fileName));
+        box.setBounds((x+1)*29+startPosition,(y+1)*29+startPosition, 29,29);
         level.add(box);
     }
     
@@ -380,83 +344,6 @@ public class GameWindow extends WindowAdapter{
         lblLevel.setBounds(150, 25, LBLWIDTH, LBLHEIGHT);
         level.add(lblLevel);
     }
-	
-	/**
-	 *	Play the background Music
-	 */
-	public AudioClip loadBGM ( String filename )
-    {
-        URL url = null;
-        try
-        {
-            url = new URL ("file:" + filename);
-        }
-        catch (MalformedURLException e)
-        {}
-        return JApplet.newAudioClip (url);
-    }
     
-	/**
-	 * The  window for playing and 
-	 * selecting the background music
-	 */
-	public void CheckMusicWindow (){
-		JFrame frame=new JFrame();  
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  
-        JPanel musicSetting=new JPanel();  
-        frame.getContentPane().add(BorderLayout.CENTER,musicSetting);  
-        
-        //making the radio Button and the confirm button
-        ButtonGroup  c =new ButtonGroup ();
-        JRadioButton c1 = new JRadioButton("on");
-        JRadioButton c2= new JRadioButton("off");
-        c.add(c1);
-        c.add(c2);
-        musicSetting.add(c1);
-        musicSetting.add(c2);
-        c1.setName("on");
-        c2.setName("off");   
-        frame.setSize(200,120);  
-        frame.setVisible(true);
-        JButton ConfirmButton = new JButton("confirm");
-        musicSetting.add(ConfirmButton);
-        ConfirmButton.setBounds(100, 100, 100, 50);
-		
-        //making a ComboBox to select the songs
-		JComboBox<String> comboBox = new JComboBox<String>();
-        comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"------","song1", "song2", "song3"}));
-        comboBox.setBounds(10, 10, 200, 200);
-        musicSetting.add(comboBox);    
-        
-        comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if(comboBox.getSelectedItem() == "song1"){
-					bgm = loadBGM ("bgm1.wav");
-					System.out.println("You selected song1");
-				}else if(comboBox.getSelectedItem() == "song2"){
-					bgm = loadBGM ("bgm2.wav");
-					System.out.println("You selected song2");
-				} else {
-					bgm = loadBGM ("bgm3.wav");
-					System.out.println("You selected song3");
-				}
-			}
-		});
-       
-        ConfirmButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(c1.isSelected()){
-					System.out.println("music on");
-					bgm.loop();
-				}else if(c2.isSelected()){
-					System.out.println("music off");
-					bgm.stop();
-				}
-			}
-		});
-        
-        
-	}
 
 }
