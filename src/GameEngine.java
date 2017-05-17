@@ -50,7 +50,7 @@ public class GameEngine extends WindowAdapter{
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                GameEngine ge = new GameEngine("map1.txt"); //running the game
+                GameEngine ge = new GameEngine("map0.txt"); //running the game
                 ge.initialiseLevelOne(ge.gw);
                 ge.gw.drawMap(ge.gm.getMap(), ge.gm.getDimension());
                 

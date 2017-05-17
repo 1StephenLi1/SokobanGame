@@ -71,19 +71,18 @@ public class Player extends Token {
 					player.setOnGoal(true);					// set 'onGoal' = true
 					mapLayout[row-1][col] = player;			// player is now on the goal (Z)
 					mapLayout[row][col] = null;				// the place player was is now null/empty space
+				}				
+				
+			} else {										// if there is no goal in front of the player
+				mapLayout[row-1][col] = mapLayout[row][col];
+				if (player.isOnGoal() == true){
+					Goal newgoal = new Goal(row,col);
+					mapLayout[row][col] = newgoal;
+					player.setOnGoal(false);
+				} else {
+					mapLayout[row][col] = null;
 				}
 				
-			} else if (player.isOnGoal() == true){			// if the player is on a goal
-				Goal newgoal = new Goal(row,col);			// if there's a goal above it
-				System.out.println("player is on goal");	// move player up and set that it is standing on a goal
-				mapLayout[row-1][col] = mapLayout[row][col];
-				mapLayout[row][col] = newgoal;
-				player.setOnGoal(false);
-				
-				
-			} else {
-				mapLayout[row-1][col] = mapLayout[row][col];
-				mapLayout[row][col] = null;
 			}
 			
 			this.setRow(row-1);
