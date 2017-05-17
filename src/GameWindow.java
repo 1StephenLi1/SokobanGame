@@ -206,9 +206,7 @@ public class GameWindow extends WindowAdapter{
                 frame.setSize(WDWWIDTH,WDWHEIGHT);
                 frame.setLocationRelativeTo(null);
                 cl.show(panelCards, "3");
-            } else if (temp.getName().equals(MUSIC)){
-				CheckMusicWindow();
-            }
+            } 
      	   
         }
         
@@ -225,9 +223,6 @@ public class GameWindow extends WindowAdapter{
         
         JButton quit = initMenuButton(QUIT, 260, 390, "Q", "ENTER");
         menu.add(quit);
-		
-        JButton musicSetting = initMenuButton(MUSIC,385,0,"S","ENTER");
-        menu.add(musicSetting);
        
         JLabel label = new JLabel("Warehouse Bros!");
         label.setFont(new Font("Copperplate", Font.PLAIN, 40));
@@ -457,7 +452,7 @@ public class GameWindow extends WindowAdapter{
 	/**
 	 *	Play the background Music
 	 */
-	public AudioClip loadBGM ( String filename )
+    public AudioClip loadBGM ( String filename )
     {
         URL url = null;
         try
@@ -468,68 +463,4 @@ public class GameWindow extends WindowAdapter{
         {}
         return JApplet.newAudioClip (url);
     }
-    
-	/**
-	 * The  window for playing and 
-	 * selecting the background music
-	 */
-	public void CheckMusicWindow (){
-		JFrame frame=new JFrame();  
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  
-        JPanel musicSetting=new JPanel();  
-        frame.getContentPane().add(BorderLayout.CENTER,musicSetting);  
-        
-        //making the radio Button and the confirm button
-        ButtonGroup  c =new ButtonGroup ();
-        JRadioButton c1 = new JRadioButton("on");
-        JRadioButton c2= new JRadioButton("off");
-        c.add(c1);
-        c.add(c2);
-        musicSetting.add(c1);
-        musicSetting.add(c2);
-        c1.setName("on");
-        c2.setName("off");   
-        frame.setSize(200,120);  
-        frame.setVisible(true);
-        JButton ConfirmButton = new JButton("confirm");
-        musicSetting.add(ConfirmButton);
-        ConfirmButton.setBounds(100, 100, 100, 50);
-		
-        //making a ComboBox to select the songs
-		JComboBox<String> comboBox = new JComboBox<String>();
-        comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"------","song1", "song2", "song3"}));
-        comboBox.setBounds(10, 10, 200, 200);
-        musicSetting.add(comboBox);    
-        
-        comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if(comboBox.getSelectedItem() == "song1"){
-					bgm = loadBGM ("bgm1.wav");
-					System.out.println("You selected song1");
-				}else if(comboBox.getSelectedItem() == "song2"){
-					bgm = loadBGM ("bgm2.wav");
-					System.out.println("You selected song2");
-				} else {
-					bgm = loadBGM ("bgm3.wav");
-					System.out.println("You selected song3");
-				}
-			}
-		});
-       
-        ConfirmButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(c1.isSelected()){
-					System.out.println("music on");
-					bgm.loop();
-				}else if(c2.isSelected()){
-					System.out.println("music off");
-					bgm.stop();
-				}
-			}
-		});
-        
-        
-	}
-
-}
+ 
