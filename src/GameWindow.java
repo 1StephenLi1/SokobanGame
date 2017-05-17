@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
@@ -90,10 +91,12 @@ public class GameWindow extends WindowAdapter{
     /** The background Music. */
 	private AudioClip bgm; 
 	
-	/*
-	CheckboxGroup c;
-    Checkbox c1,c2;
-    */
+	private ArrayList<ImageIcon> images;
+	private final int BOX = 0;
+	private final int GOAL = 1;
+	private final int PLAYER = 2;
+	private final int WALL = 3;
+
 	
     /**
      * This creates an empty game window, that the game will present in.
@@ -102,6 +105,7 @@ public class GameWindow extends WindowAdapter{
      * It is not visible when created, and must be turned on later!
      */
     public GameWindow() {
+    	loadAssets();
         frame = new JFrame();
         //frame.setLayout(null); //Means we set coordinates ourselves i.e. no auto layout => more control
         frame.setSize(WDWWIDTH, WDWHEIGHT); //set frame size to specified width and height
@@ -128,6 +132,13 @@ public class GameWindow extends WindowAdapter{
         frame.setVisible(true);
     }
     
+    public void loadAssets() {
+    	images = new ArrayList<>();
+    	images.add(new ImageIcon("box.png"));
+    	images.add(new ImageIcon("goal.png"));
+    	images.add(new ImageIcon("player.png"));
+    	images.add(new ImageIcon("wall.png"));
+    }
     /**
      * This is just a container for an action, to obtain the focus of a button.
      */
@@ -327,13 +338,13 @@ public class GameWindow extends WindowAdapter{
                 if (map[i][j] == null)
                     continue;
                 if (map[i][j].getType()=='B') {
-                    initToken(j, i, "box.png");
+                    initToken(j, i, BOX);
                 } else if (map[i][j].getType()=='W') {
-                    initToken(j, i, "wall.png");
+                    initToken(j, i, WALL);
                 } else if (map[i][j].getType()=='P') {
-                    initToken(j, i, "player.png");
+                    initToken(j, i, PLAYER);
                 } else if (map[i][j].getType()=='G') {
-                    initToken(j, i, "goal.png");
+                    initToken(j, i, GOAL);
                 }
             }
         }
@@ -349,9 +360,9 @@ public class GameWindow extends WindowAdapter{
      * @param y the y coordinate where the token is to be placed
      * @param fileName the file name
      */
-    public void initToken(int x, int y, String fileName) {
+    public void initToken(int x, int y, int fileName) {
         JLabel box = new JLabel();
-        box.setIcon(new ImageIcon(fileName));
+        box.setIcon(images.get(fileName));
         box.setBounds(x,y,29,29);
         box.setLocation((x+1)*40+50,(y+1)*40+50);
         level.add(box);
