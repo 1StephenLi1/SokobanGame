@@ -50,9 +50,9 @@ public class GameEngine extends WindowAdapter{
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                GameEngine ge = new GameEngine("map0.txt"); //running the game
+                GameEngine ge = new GameEngine("map1.txt"); //running the game
                 ge.initialiseLevelOne(ge.gw);
-                ge.gw.drawMap(ge.gm.getMap(), ge.gm.getDimension());
+                ge.gw.drawMap(ge.gm.getMap(), ge.gm.getDimension(), 2);  //'2' means the starting face of our player(facedown) 
                 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -106,21 +106,35 @@ public class GameEngine extends WindowAdapter{
         @Override
         public void actionPerformed(ActionEvent e) {
             boolean changed = false;
+            int face = 0;	//1: face up, 2: face down, 3: face left, 4: face right
 	    	switch (key) {
             case UP: 
-            	if (gm.getPlayer().moveUp(gm)) changed = true;
+            	if (gm.getPlayer().moveUp(gm)) {
+            		changed = true;
+            		face = 1;
+            	}
+            	//System.out.println("----> moved up!!!!");
                 break;
             case DOWN: 
-            	if (gm.getPlayer().moveDown(gm)) changed = true;
+            	if (gm.getPlayer().moveDown(gm)) {
+            		changed = true;
+            		face = 2;
+            	}
                 break;
             case LEFT: 
-            	if (gm.getPlayer().moveLeft(gm)) changed = true;
+            	if (gm.getPlayer().moveLeft(gm)){
+            		changed = true;
+            		face = 3;
+            	} 
                 break;
             case RIGHT: 
-            	if (gm.getPlayer().moveRight(gm)) changed = true;
+            	if (gm.getPlayer().moveRight(gm)) {
+            		changed = true;
+            		face = 4;
+            	}
                 break;
             }
-	    	if (changed) gw.drawMap(gm.getMap(), gm.getDimension());
+	    	if (changed && face != 0) gw.drawMap(gm.getMap(), gm.getDimension(),face);
 	    	if (gm.getNumGoals()==0){
 	    	    System.out.println("YOU WON!");
 	    	    System.exit(0);
