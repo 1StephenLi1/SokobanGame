@@ -49,7 +49,7 @@ public class GameEngine extends WindowAdapter{
      */
     public GameEngine(ArrayList<String> maps) throws IOException {
     	gm = new GameMap(maps); //stores map information
-    	gw = new GameWindow();
+    	gw = new GameWindow(gm);
     }
     
 }

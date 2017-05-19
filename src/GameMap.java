@@ -10,6 +10,10 @@ import java.util.ArrayList;
  * The {@code readMap} method is used to convert a txt file
  * into a token array for rendering.
  */
+/**
+ * @author lukel
+ *
+ */
 public class GameMap {
 	
 	/** A 2D token array, storing all object on the map
@@ -120,7 +124,7 @@ public class GameMap {
 	 * @param fileName the file name
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-    private void readMap(String fileName) throws IOException {
+    public void readMap(String fileName) throws IOException {
     	FileReader f = new FileReader(fileName);
 		int row = 0, column = 0;
 		int tempRow =0, tempColumn = 0;
@@ -172,4 +176,12 @@ public class GameMap {
 		}
 		this.map = map;
 	}
+    
+    /**
+     * gets the current level of the map
+     */
+	public int getCurrLevel() {
+		return currLevel;
+	}
+    
 }

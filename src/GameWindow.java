@@ -55,6 +55,8 @@ public class GameWindow extends WindowAdapter{
     /** The wdwheight. */
     private final int WDWHEIGHT = 500;
     
+    private GameMap gmInGW = null;
+    
     /** The Constant GO. */
     private static final String
         HOVER = "HOVER",
@@ -65,7 +67,8 @@ public class GameWindow extends WindowAdapter{
         UP = "UP",
         DOWN = "DOWN",
         LEFT = "LEFT",
-        RIGHT = "RIGHT";
+        RIGHT = "RIGHT",
+        RESTART = "RESTART";
     
     /** The frame. */
     private JFrame frame;
@@ -105,7 +108,8 @@ public class GameWindow extends WindowAdapter{
      * It is initalised as an empty window, and needs to be populated!
      * It is not visible when created, and must be turned on later!
      */
-    public GameWindow() {
+    public GameWindow(GameMap gm) {
+    	gmInGW = gm;
         loadAssets();
         frame = new JFrame();
         //frame.setLayout(null); //Means we set coordinates ourselves i.e. no auto layout => more control
@@ -211,6 +215,14 @@ public class GameWindow extends WindowAdapter{
                 frame.setSize(WDWWIDTH,WDWHEIGHT);
                 frame.setLocationRelativeTo(null);
                 cl.show(panelCards, "3");
+            } else if (temp.getName().equals(RESTART)){
+            	try {
+            		String file = "map" + Integer.toString(gmInGW.getCurrLevel()+1) +".txt";
+					gmInGW.readMap(file);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+            	drawMap(gmInGW.getMap(), gmInGW.getDimension(), 1);
             } 
         }
         
@@ -386,8 +398,8 @@ public class GameWindow extends WindowAdapter{
             }
             if (changed && face != 0) gw.drawMap(gm.getMap(), gm.getDimension(),face);
             if (gm.getNumGoals()==0){
-                    gm.loadNextLevel();
-                    gw.drawMap(gm.getMap(), gm.getDimension(),face);
+            	gm.loadNextLevel();
+            	gw.drawMap(gm.getMap(), gm.getDimension(),face);
             }
         }
     }
@@ -521,6 +533,8 @@ public class GameWindow extends WindowAdapter{
                 }
             }
         }
+        JButton restart = initMenuButton(RESTART, 10, 10, "R", "ENTER");
+        level.add(restart);
         level.revalidate();
         level.repaint();
     }
