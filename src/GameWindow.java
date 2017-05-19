@@ -92,6 +92,7 @@ public class GameWindow extends WindowAdapter{
 	private final int PLAYERRIGHT = 4;
 	private final int PLAYERDOWN = 2;
 	private final int WALL = 6;
+	private final int GBOX = 7;
 
 	
     /**
@@ -137,6 +138,7 @@ public class GameWindow extends WindowAdapter{
     	images.add(new ImageIcon("playerright.png"));//4
     	images.add(new ImageIcon("playerup.png"));//5
     	images.add(new ImageIcon("wall.png"));//6
+    	images.add(new ImageIcon("gbox.png"));//7
     }
     /**
      * This is just a container for an action, to obtain the focus of a button.
@@ -403,7 +405,12 @@ public class GameWindow extends WindowAdapter{
                 if (map[i][j] == null)
                     continue;
                 if (map[i][j].getType()=='B') {
-                    initToken(j, i, dimension, BOX);
+                	Box b = (Box) map[i][j];
+                	if (b.isOnGoal()) {
+                		initToken(j, i, dimension, GBOX);
+                	} else {
+                		initToken(j, i, dimension, BOX);
+                	}
                 } else if (map[i][j].getType()=='W') {
                     initToken(j, i, dimension, WALL);
                 } else if (map[i][j].getType()=='P' && face == 1) {
