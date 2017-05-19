@@ -133,9 +133,9 @@ public class GameWindow extends WindowAdapter{
     	images.add(new ImageIcon("box.png"));//0
     	images.add(new ImageIcon("goal.png"));//1
     	images.add(new ImageIcon("playerdown.png"));//2
-    	images.add(new ImageIcon("playerleft.GIF"));//3
-    	images.add(new ImageIcon("playerright.GIF"));//4
-    	images.add(new ImageIcon("playerup.GIF"));//5
+    	images.add(new ImageIcon("playerleft.png"));//3
+    	images.add(new ImageIcon("playerright.png"));//4
+    	images.add(new ImageIcon("playerup.png"));//5
     	images.add(new ImageIcon("wall.png"));//6
     }
     /**
