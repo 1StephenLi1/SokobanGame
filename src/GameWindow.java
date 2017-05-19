@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
-
 
 /**
  * The Class GameWindow.
@@ -61,7 +61,11 @@ public class GameWindow extends WindowAdapter{
         SELECT = "SELECT",
         START = "START",
         QUIT = "QUIT",
-        GO = "GO";
+        GO = "GO",
+        UP = "UP",
+        DOWN = "DOWN",
+        LEFT = "LEFT",
+        RIGHT = "RIGHT";
     
     /** The frame. */
     private JFrame frame;
@@ -314,6 +318,98 @@ public class GameWindow extends WindowAdapter{
                 }
             }
         });
+    }
+    
+    /**
+     * The action is required by actionmap for the level panel.
+     * This class is used to bind keyboard input to functions which
+     * move the player, and redraw the map. 
+     */
+    private static class move extends AbstractAction {
+        
+        /** The Constant serialVersionUID. */
+        //this is needed for nested classes to stop warnings, it's a unique id.
+        private static final long serialVersionUID = 3L; 
+        
+        /** The key that was pressed. */
+        final String key;
+        
+        /** The GameEngine within which the move is to be performed*/
+        final GameMap gm;
+
+        final GameWindow gw;
+        /**
+         * Instantiates a new move.
+         *
+         * @param j the jpanel within which the contents will be updated
+         * @param s the key that was pressed
+         * @param engine the GameEngine
+         */
+        public move(GameMap gm, GameWindow gw, String s) {
+            key = s;
+            this.gm = gm;
+            this.gw = gw;
+        }
+        
+        /* (non-Javadoc)
+         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean changed = false;
+            int face = 0;   //1: face up, 2: face down, 3: face left, 4: face right
+            switch (key) {
+            case UP: 
+                if (gm.getPlayer().moveUp(gm)) {
+                    changed = true;
+                    face = 1;
+                }
+                break;
+            case DOWN: 
+                if (gm.getPlayer().moveDown(gm)) {
+                    changed = true;
+                    face = 2;
+                }
+                break;
+            case LEFT: 
+                if (gm.getPlayer().moveLeft(gm)){
+                    changed = true;
+                    face = 3;
+                } 
+                break;
+            case RIGHT: 
+                if (gm.getPlayer().moveRight(gm)) {
+                    changed = true;
+                    face = 4;
+                }
+                break;
+            }
+            if (changed && face != 0) gw.drawMap(gm.getMap(), gm.getDimension(),face);
+            if (gm.getNumGoals()==0){
+                    gm.loadNextLevel();
+                    gw.drawMap(gm.getMap(), gm.getDimension(),face);
+            }
+        }
+    }
+    
+    /**
+     * Initialise level one.
+     *
+     * @param gw the GameWindow on which the level is to be drawn
+     */
+    public void initialiseLevelOne(GameMap gm) {
+        level.setSize(WDWWIDTH, WDWHEIGHT);
+        initTitle();
+        level.setBackground(Color.DARK_GRAY);
+        
+        level.getInputMap(IFW).put(KeyStroke.getKeyStroke(UP), UP);
+        level.getInputMap(IFW).put(KeyStroke.getKeyStroke(DOWN), DOWN);
+        level.getInputMap(IFW).put(KeyStroke.getKeyStroke(LEFT), LEFT);        
+        level.getInputMap(IFW).put(KeyStroke.getKeyStroke(RIGHT), RIGHT);
+        level.getActionMap().put(UP, new move(gm, this, UP));
+        level.getActionMap().put(DOWN, new move(gm, this, DOWN));
+        level.getActionMap().put(LEFT, new move(gm, this, LEFT));
+        level.getActionMap().put(RIGHT, new move(gm, this, RIGHT));
     }
     
     /**

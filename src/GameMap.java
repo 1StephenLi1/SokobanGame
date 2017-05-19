@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * The {@code GameMap Class} is the Model, in the MVC scheme.
@@ -23,6 +24,12 @@ public class GameMap {
 	/** The number of boxes on the map*/
 	private int numBoxes;
 	
+	private ArrayList<String> maps;
+	/**
+	 * The current level being played.
+	 */
+	private int currLevel;
+	
 	/** A pointer to the player object for easy referencing */
 	private Player player;
 	
@@ -30,10 +37,25 @@ public class GameMap {
 	 * Instantiates a new game map.
 	 * @throws IOException 
 	 */
-	public GameMap(String fileName) throws IOException{
-	    readMap(fileName);
+	public GameMap(ArrayList<String> maps) throws IOException{
+	    this.maps = maps;
+	    readMap(maps.get(0));
+	    currLevel = 0;
 	}
 	
+	public void loadNextLevel() {
+	    currLevel++;
+	    if (currLevel < maps.size()) {
+            try {
+                readMap(maps.get(currLevel));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+	    } else {
+	        System.out.println("You Won!");
+	        System.exit(0);
+	    }
+	}
 	/**
 	 * Fets the dimension of the map.
 	 *
