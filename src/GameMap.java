@@ -10,27 +10,27 @@ import java.util.ArrayList;
  * The {@code readMap} method is used to convert a txt file
  * into a token array for rendering.
  */
-/**
- * @author lukel
- *
- */
 public class GameMap {
 	
 	/** A 2D token array, storing all object on the map
 	 * The row and column index in the array correspond to
-	 * coordinates on the map */
+	 * coordinates on the map 
+	 */
 	private Token[][] map = null;
 	
 	/** The dimension of the map. i.e. an 8x8 grid has dimension 8
-	 * Only one dimension is specified since all maps are square*/
+	 * Only one dimension is specified since all maps are square
+	 */
 	private int dimension;
 	
 	/** The number of boxes on the map*/
 	private int numBoxes;
 	
+	/** An array list storing all the maps for a particular difficulty. */
 	private ArrayList<String> maps;
+	
 	/**
-	 * The current level being played.
+	 * The current level being played, indexed from 0.
 	 */
 	private int currLevel;
 	
@@ -47,6 +47,9 @@ public class GameMap {
 	    currLevel = 0;
 	}
 	
+	/** 
+	 * This function loads the next level, it is called when a level is finished.
+	 */
 	public void loadNextLevel() {
 	    currLevel++;
 	    if (currLevel < maps.size()) {
@@ -61,18 +64,14 @@ public class GameMap {
 	    }
 	}
 	/**
-	 * Fets the dimension of the map.
-	 *
-	 * @return the dimension
+	 * @return the dimension of the map
 	 */
 	public int getDimension(){
 		return dimension;
 	}
 	
 	/**
-	 * Fets the number of goals on the map.
-	 *
-	 * @return the num goals
+	 * @return the number of goals that have not been completed
 	 */
 	public int getNumGoals(){
 	    int countGoal = 0;
@@ -91,27 +90,21 @@ public class GameMap {
 	}
 	
 	/**
-	 * gets the number of boxes of the map.
-	 *
-	 * @return the num boxes
+	 * @return the number of boxes on the map
 	 */
 	public int getNumBoxes(){
 		return numBoxes;
 	}
 	
 	/**
-	 * Gets the player.
-	 *
-	 * @return the player
+	 * @return the player object on the map
 	 */
 	public Player getPlayer() {
 		return player;
 	}
 	
 	/**
-	 * Gets the map of the game in a 2d array of objects.
-	 *
-	 * @return the map
+	 * @return A 2D token array storing the map information.
 	 */
 	public Token[][] getMap(){
 		return map;
