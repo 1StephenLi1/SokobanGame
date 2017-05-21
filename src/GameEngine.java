@@ -35,7 +35,7 @@ public class GameEngine extends WindowAdapter{
                 
                 GameEngine ge = new GameEngine(maps); //running the game
                 ge.gw.initialiseLevelOne(ge.gm);
-                ge.gw.drawMap(ge.gm.getMap(), ge.gm.getDimension(), 1);  //'2' means the starting face of our player(facedown) 
+                ge.gw.drawMap(ge.gm.getMap(), ge.gm.getCurrLevel(), ge.gm.getDimension(), 1);  //int parameter sets the starting face of our player
                 
             } catch (Exception e) {
                 e.printStackTrace();
