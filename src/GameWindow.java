@@ -109,7 +109,7 @@ public class GameWindow extends WindowAdapter{
      * It is not visible when created, and must be turned on later!
      */
     public GameWindow(GameMap gm) {
-    	gmInGW = gm;
+        gmInGW = gm;
         loadAssets();
         frame = new JFrame();
         //frame.setLayout(null); //Means we set coordinates ourselves i.e. no auto layout => more control
@@ -216,13 +216,13 @@ public class GameWindow extends WindowAdapter{
                 frame.setLocationRelativeTo(null);
                 cl.show(panelCards, "3");
             } else if (temp.getName().equals(RESTART)){
-            	try {
-            		String file = "map" + Integer.toString(gmInGW.getCurrLevel()+1) +".txt";
-					gmInGW.readMap(file);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-            	drawMap(gmInGW.getMap(), gmInGW.getDimension(), 1);
+                try {
+                    String file = "map" + Integer.toString(gmInGW.getCurrLevel()+1) +".txt";
+                    gmInGW.readMap(file);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 1);
             } 
         }
         
@@ -396,10 +396,12 @@ public class GameWindow extends WindowAdapter{
                 }
                 break;
             }
-            if (changed && face != 0) gw.drawMap(gm.getMap(), gm.getDimension(),face);
+            if (changed && face != 0) gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),face);
             if (gm.getNumGoals()==0){
-            	gm.loadNextLevel();
-            	gw.drawMap(gm.getMap(), gm.getDimension(),face);
+                gw.level.removeAll();
+                gw.initialiseLevelOne(gm);
+                gm.loadNextLevel();
+                gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),face);
             }
         }
     }
@@ -411,7 +413,7 @@ public class GameWindow extends WindowAdapter{
      */
     public void initialiseLevelOne(GameMap gm) {
         level.setSize(WDWWIDTH, WDWHEIGHT);
-        initTitle();
+        initTitle(gm.getCurrLevel());
         level.setBackground(Color.DARK_GRAY);
         
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke(UP), UP);
@@ -503,9 +505,9 @@ public class GameWindow extends WindowAdapter{
      * @param g the GameMap which contains the map data
      * @param gw the GameWindow on which the map is to be rendered
      */
-    public void drawMap (Token[][] map, int dimension, int face) {
+    public void drawMap (Token[][] map, int currLevel, int dimension, int face) {
         level.removeAll();
-        initTitle();
+        initTitle(currLevel);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 if (map[i][j] == null)
@@ -562,19 +564,18 @@ public class GameWindow extends WindowAdapter{
      *
      * @param gw the GameWindow on which the title is to be drawn
      */
-    public void initTitle() {
-        JLabel lblLevel = new JLabel("Level One");
+    public void initTitle(int currLevel) {
+        JLabel lblLevel = new JLabel("Level " + (currLevel+1));
         lblLevel.setFont(new Font("Copperplate", Font.PLAIN, 40));
         lblLevel.setForeground(Color.WHITE);
-        lblLevel.setBounds(150, 25, LBLWIDTH, LBLHEIGHT);
+        lblLevel.setBounds(170, 25, LBLWIDTH, LBLHEIGHT);
         level.add(lblLevel);
     }
     
     /**
      *  Play the background Music
      */
-    public AudioClip loadBGM ( String filename )
-    {
+    public AudioClip loadBGM (String filename) {
         URL url = null;
         try
         {
