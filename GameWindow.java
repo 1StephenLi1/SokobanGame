@@ -63,6 +63,7 @@ public class GameWindow extends WindowAdapter{
         SELECT = "SELECT",
         START = "START",
         QUIT = "QUIT",
+        NEXT = "NEXT",
         GO = "GO",
         UP = "UP",
         DOWN = "DOWN",
@@ -88,6 +89,9 @@ public class GameWindow extends WindowAdapter{
     
     /** The level. */
     protected JPanel level;
+    
+    /** Character Select. */
+    protected JPanel characterSelect;
     
     /** Win screen. */
     protected JPanel winScreen;
@@ -128,6 +132,7 @@ public class GameWindow extends WindowAdapter{
         menu = new JPanel(null);
         levelSelection = new JPanel(null);
         level = new JPanel(null);
+        characterSelect = new JPanel(null);
         winScreen = new JPanel(null);
         cl = new CardLayout();
         
@@ -136,10 +141,12 @@ public class GameWindow extends WindowAdapter{
         panelCards.add(levelSelection, "2");
         panelCards.add(level, "3");
         panelCards.add(winScreen, "5");
+        panelCards.add(characterSelect, "6");
         cl.show(panelCards, "1");
         frame.getContentPane().add(panelCards);
         initialiseMenu();
         initialiseLevelSelection();
+        initialiseCharScreen();
         frame.setVisible(true);
     }
     
@@ -217,6 +224,10 @@ public class GameWindow extends WindowAdapter{
                 frame.setSize(WDWWIDTH,WDWHEIGHT);
                 frame.setLocationRelativeTo(null);
                 cl.show(panelCards, "2");
+            } else if (temp.getName().equals(NEXT)){
+                frame.setSize(WDWWIDTH,WDWHEIGHT);
+                frame.setLocationRelativeTo(null);
+                cl.show(panelCards, "6");
             } else if (temp.getName().equals(GO)){
                 frame.setSize(WDWWIDTH,WDWHEIGHT);
                 frame.setLocationRelativeTo(null);
@@ -286,8 +297,8 @@ public class GameWindow extends WindowAdapter{
         comboBox.setBounds(250, 100, BTNWIDTH+20, BTNHEIGHT);
         levelSelection.add(comboBox);
         
-        JButton btnGo = initMenuButton(GO, 250, 280, "G", "ENTER");
-        levelSelection.add(btnGo);
+        JButton btnNext = initMenuButton(NEXT, 250, 280, "N", "ENTER");
+        levelSelection.add(btnNext);
         
       //making the radio Button and the confirm button
         ButtonGroup  c = new ButtonGroup ();
@@ -327,7 +338,7 @@ public class GameWindow extends WindowAdapter{
             }
         });
        
-        btnGo.addActionListener(new ActionListener() {
+        btnNext.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(c1.isSelected()){
                     System.out.println("music on");
@@ -440,9 +451,22 @@ public class GameWindow extends WindowAdapter{
     }
     
     /**
-     * Initialise level one.
      *
-     * @param gw the GameWindow on which the level is to be drawn
+     */
+    public void initialiseCharScreen() {
+        characterSelect.setSize(WDWWIDTH, WDWHEIGHT);
+        JLabel lblLevel = new JLabel("Choose Character!");
+        lblLevel.setFont(new Font("Copperplate", Font.PLAIN, 40));
+        lblLevel.setForeground(Color.WHITE);
+        lblLevel.setBounds(60, 70, LBLWIDTH, LBLHEIGHT);
+        characterSelect.add(lblLevel);
+        characterSelect.setBackground(Color.DARK_GRAY);
+        JButton btnGo = initMenuButton(GO, 195, 380, "E", "ENTER");
+        characterSelect.add(btnGo);
+    }
+    
+    /**
+     * 
      */
     public void initialiseWinScreen() {
         winScreen.setSize(WDWWIDTH, WDWHEIGHT);
