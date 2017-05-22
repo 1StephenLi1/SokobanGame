@@ -50,7 +50,7 @@ public class GameMap {
 	/** 
 	 * This function loads the next level, it is called when a level is finished.
 	 */
-	public void loadNextLevel() {
+	public boolean loadNextLevel() {
 	    currLevel++;
 	    if (currLevel < maps.size()) {
             try {
@@ -58,9 +58,9 @@ public class GameMap {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return true;
 	    } else {
-	        System.out.println("You Won!");
-	        System.exit(0);
+	        return false;
 	    }
 	}
 	/**

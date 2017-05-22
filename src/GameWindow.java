@@ -63,12 +63,14 @@ public class GameWindow extends WindowAdapter{
         SELECT = "SELECT",
         START = "START",
         QUIT = "QUIT",
+        NEXT = "NEXT",
         GO = "GO",
         UP = "UP",
         DOWN = "DOWN",
         LEFT = "LEFT",
         RIGHT = "RIGHT",
-        RESTART = "RESTART";
+        RESTART = "RESTART",
+        END = "END";
     
     /** The frame. */
     private JFrame frame;
@@ -87,6 +89,12 @@ public class GameWindow extends WindowAdapter{
     
     /** The level. */
     protected JPanel level;
+    
+    /** Character Select. */
+    protected JPanel characterSelect;
+    
+    /** Win screen. */
+    protected JPanel winScreen;
     
     /** The background Music. */
     private AudioClip bgm; 
@@ -124,16 +132,21 @@ public class GameWindow extends WindowAdapter{
         menu = new JPanel(null);
         levelSelection = new JPanel(null);
         level = new JPanel(null);
+        characterSelect = new JPanel(null);
+        winScreen = new JPanel(null);
         cl = new CardLayout();
         
         panelCards.setLayout(cl);
         panelCards.add(menu, "1");
         panelCards.add(levelSelection, "2");
         panelCards.add(level, "3");
+        panelCards.add(winScreen, "5");
+        panelCards.add(characterSelect, "6");
         cl.show(panelCards, "1");
         frame.getContentPane().add(panelCards);
         initialiseMenu();
         initialiseLevelSelection();
+        initialiseCharScreen();
         frame.setVisible(true);
     }
     
@@ -211,6 +224,10 @@ public class GameWindow extends WindowAdapter{
                 frame.setSize(WDWWIDTH,WDWHEIGHT);
                 frame.setLocationRelativeTo(null);
                 cl.show(panelCards, "2");
+            } else if (temp.getName().equals(NEXT)){
+                frame.setSize(WDWWIDTH,WDWHEIGHT);
+                frame.setLocationRelativeTo(null);
+                cl.show(panelCards, "6");
             } else if (temp.getName().equals(GO)){
                 frame.setSize(WDWWIDTH,WDWHEIGHT);
                 frame.setLocationRelativeTo(null);
@@ -223,7 +240,9 @@ public class GameWindow extends WindowAdapter{
                     e1.printStackTrace();
                 }
                 drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 1);
-            } 
+            } else if (temp.getName().equals(END)) {
+                System.exit(0);
+            }
         }
         
     }
@@ -278,13 +297,13 @@ public class GameWindow extends WindowAdapter{
         comboBox.setBounds(250, 100, BTNWIDTH+20, BTNHEIGHT);
         levelSelection.add(comboBox);
         
-        JButton btnGo = initMenuButton(GO, 250, 280, "G", "ENTER");
-        levelSelection.add(btnGo);
+        JButton btnNext = initMenuButton(NEXT, 250, 280, "N", "ENTER");
+        levelSelection.add(btnNext);
         
       //making the radio Button and the confirm button
-        ButtonGroup  c =new ButtonGroup ();
+        ButtonGroup  c = new ButtonGroup ();
         JRadioButton c1 = new JRadioButton("on");
-        JRadioButton c2= new JRadioButton("off");
+        JRadioButton c2 = new JRadioButton("off");
         
         c.add(c1);
         c.add(c2);
@@ -319,7 +338,7 @@ public class GameWindow extends WindowAdapter{
             }
         });
        
-        btnGo.addActionListener(new ActionListener() {
+        btnNext.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(c1.isSelected()){
                     System.out.println("music on");
@@ -400,8 +419,13 @@ public class GameWindow extends WindowAdapter{
             if (gm.getNumGoals()==0){
                 gw.level.removeAll();
                 gw.initialiseLevelOne(gm);
-                gm.loadNextLevel();
-                gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),face);
+                if (gm.loadNextLevel()) {
+                    gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),face);
+                } else {
+                    gw.initialiseWinScreen();
+                    gw.cl.show(gw.panelCards, "5");
+                }
+                
             }
         }
     }
@@ -424,6 +448,36 @@ public class GameWindow extends WindowAdapter{
         level.getActionMap().put(DOWN, new move(gm, this, DOWN));
         level.getActionMap().put(LEFT, new move(gm, this, LEFT));
         level.getActionMap().put(RIGHT, new move(gm, this, RIGHT));
+    }
+    
+    /**
+     *
+     */
+    public void initialiseCharScreen() {
+        characterSelect.setSize(WDWWIDTH, WDWHEIGHT);
+        JLabel lblLevel = new JLabel("Choose Character!");
+        lblLevel.setFont(new Font("Copperplate", Font.PLAIN, 40));
+        lblLevel.setForeground(Color.WHITE);
+        lblLevel.setBounds(60, 70, LBLWIDTH, LBLHEIGHT);
+        characterSelect.add(lblLevel);
+        characterSelect.setBackground(Color.DARK_GRAY);
+        JButton btnGo = initMenuButton(GO, 195, 380, "E", "ENTER");
+        characterSelect.add(btnGo);
+    }
+    
+    /**
+     * 
+     */
+    public void initialiseWinScreen() {
+        winScreen.setSize(WDWWIDTH, WDWHEIGHT);
+        JLabel lblLevel = new JLabel("You Won!");
+        lblLevel.setFont(new Font("Copperplate", Font.PLAIN, 60));
+        lblLevel.setForeground(Color.WHITE);
+        lblLevel.setBounds(110, 200, LBLWIDTH, LBLHEIGHT);
+        winScreen.add(lblLevel);
+        winScreen.setBackground(Color.DARK_GRAY);
+        JButton btnGo = initMenuButton(END, 195, 380, "E", "ENTER");
+        winScreen.add(btnGo);
     }
     
     /**
