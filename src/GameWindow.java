@@ -55,9 +55,13 @@ public class GameWindow extends WindowAdapter{
     /** The wdwheight. */
     private final int WDWHEIGHT = 500;
     
+    /** use of GameMap class */
     private GameMap gmInGW = null;
     
-    /** The Constant GO. */
+    /** index of player */
+    private int playerSelected;
+
+	/** The Constant GO. */
     private static final String
         HOVER = "HOVER",
         SELECT = "SELECT",
@@ -108,6 +112,8 @@ public class GameWindow extends WindowAdapter{
     private final int PLAYERDOWN = 2;
     private final int WALL = 6;
     private final int GBOX = 7;
+    private final int PLAYER2UP = 8; 
+    private final int PLAYER3UP = 9;
 
     
     /**
@@ -160,6 +166,8 @@ public class GameWindow extends WindowAdapter{
         images.add(new ImageIcon("playerup.png"));//5
         images.add(new ImageIcon("wall.png"));//6
         images.add(new ImageIcon("gbox.png"));//7
+        images.add(new ImageIcon("playerup2.jpg"));
+        images.add(new ImageIcon("playerup3.jpg"));
     }
     /**
      * This is just a container for an action, to obtain the focus of a button.
@@ -458,10 +466,55 @@ public class GameWindow extends WindowAdapter{
         JLabel lblLevel = new JLabel("Choose Character!");
         lblLevel.setFont(new Font("Copperplate", Font.PLAIN, 40));
         lblLevel.setForeground(Color.WHITE);
-        lblLevel.setBounds(60, 70, LBLWIDTH, LBLHEIGHT);
+        lblLevel.setBounds(70, 50, LBLWIDTH, LBLHEIGHT);
         characterSelect.add(lblLevel);
         characterSelect.setBackground(Color.DARK_GRAY);
+        
+        JRadioButton rbp1 = new JRadioButton("");
+		rbp1.setBounds(68, 333, 70, 31);
+		rbp1.setBackground(Color.DARK_GRAY);
+		characterSelect.add(rbp1);
+		
+		JRadioButton rbp2 = new JRadioButton("");
+		rbp2.setBounds(235, 333, 70, 31);
+		rbp2.setBackground(Color.DARK_GRAY);
+		characterSelect.add(rbp2);
+		
+		JRadioButton rbp3 = new JRadioButton("");
+		rbp3.setBounds(387, 333, 70, 31);
+		rbp3.setBackground(Color.DARK_GRAY);
+		characterSelect.add(rbp3);
+		
+		ImageIcon icon1 = new ImageIcon("P1.jpg"); 
+		JLabel p1Label = new JLabel();
+		p1Label.setIcon(icon1);
+		p1Label.setBounds(14, 117, 137, 196);
+		characterSelect.add(p1Label);
+		
+		ImageIcon icon2 = new ImageIcon("P2.jpg"); 
+		JLabel p2Label = new JLabel();
+		p2Label.setIcon(icon2);
+		p2Label.setBounds(177, 117, 143, 196);
+		characterSelect.add(p2Label);
+		
+		ImageIcon icon3 = new ImageIcon("P3.jpg"); 
+		JLabel p3Label = new JLabel();
+		p3Label.setIcon(icon3);
+		p3Label.setBounds(334, 117, 134, 196);
+		characterSelect.add(p3Label);
+        
         JButton btnGo = initMenuButton(GO, 195, 380, "E", "ENTER");
+        btnGo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	if(rbp1.isSelected()){
+                    setPlayerSelected(1);
+            	} else if (rbp2.isSelected()){
+            		setPlayerSelected(2);
+                } else if (rbp3.isSelected()){
+                	setPlayerSelected(3);
+                }
+            }
+        });
         characterSelect.add(btnGo);
     }
     
@@ -575,13 +628,17 @@ public class GameWindow extends WindowAdapter{
                     }
                 } else if (map[i][j].getType()=='W') {
                     initToken(j, i, dimension, WALL);
-                } else if (map[i][j].getType()=='P' && face == 1) {
+                } else if (map[i][j].getType()=='P'&& getPlayerSelected()==2) {
+                    initToken(j, i, dimension, PLAYER2UP);
+                } else if (map[i][j].getType()=='P'&& getPlayerSelected()==3) {
+                    initToken(j, i, dimension, PLAYER3UP);
+                } else if (map[i][j].getType()=='P' && face == 1 && getPlayerSelected()==1) {
                     initToken(j, i, dimension, PLAYERUP);
-                } else if (map[i][j].getType()=='P' && face == 2) {
+                } else if (map[i][j].getType()=='P' && face == 2 && getPlayerSelected()==1) {
                     initToken(j, i, dimension, PLAYERDOWN);
-                } else if (map[i][j].getType()=='P' && face == 3) {
+                } else if (map[i][j].getType()=='P' && face == 3 && getPlayerSelected()==1) {
                     initToken(j, i, dimension, PLAYERLEFT);
-                } else if (map[i][j].getType()=='P' && face == 4) {
+                } else if (map[i][j].getType()=='P' && face == 4 && getPlayerSelected()==1) {
                     initToken(j, i, dimension, PLAYERRIGHT);
                 } 
                 else if (map[i][j].getType()=='G') {
@@ -640,5 +697,18 @@ public class GameWindow extends WindowAdapter{
         }
         return JApplet.newAudioClip (url);
     }
-
+    
+    /**
+     * gets the index of character 
+     */
+    public int getPlayerSelected() {
+		return playerSelected;
+	}
+    
+    /**
+     * sets the index of character used
+     */
+	public void setPlayerSelected(int playerSelected) {
+		this.playerSelected = playerSelected;
+	}
 }
