@@ -56,7 +56,7 @@ public class GameWindow extends WindowAdapter{
     private final int WDWHEIGHT = 500;
     
     /** use of GameMap class */
-    private GameMap gmInGW = null;
+    private GameMap gmInGW;
     
     /** index of player */
     private int playerSelected;
@@ -301,9 +301,21 @@ public class GameWindow extends WindowAdapter{
         levelSelection.add(musicSelect);
         
         JComboBox<String> comboBox = new JComboBox<String>();
-        comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Normal", "Heroic", "Legendary"}));
+        comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Campaign", "Bonus Levels"}));
         comboBox.setBounds(250, 100, BTNWIDTH+20, BTNHEIGHT);
         levelSelection.add(comboBox);
+        comboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                if(comboBox.getSelectedItem() == "Mario"){
+                    bgm = loadBGM ("bgm1Mario.wav");
+                    System.out.println("You selected song1");
+                }else if(comboBox.getSelectedItem() == "Sonic"){
+                    bgm = loadBGM ("bgm2Sonic.wav");
+                    System.out.println("You selected song2");
+                }
+            }
+        });
         
         JButton btnNext = initMenuButton(NEXT, 250, 280, "N", "ENTER");
         levelSelection.add(btnNext);
@@ -470,6 +482,9 @@ public class GameWindow extends WindowAdapter{
         characterSelect.add(lblLevel);
         characterSelect.setBackground(Color.DARK_GRAY);
         
+        ButtonGroup c = new ButtonGroup ();
+        
+        
         JRadioButton rbp1 = new JRadioButton("");
 		rbp1.setBounds(68, 333, 70, 31);
 		rbp1.setBackground(Color.DARK_GRAY);
@@ -485,6 +500,12 @@ public class GameWindow extends WindowAdapter{
 		rbp3.setBackground(Color.DARK_GRAY);
 		characterSelect.add(rbp3);
 		
+		c.add(rbp1);
+        c.add(rbp2);
+        c.add(rbp3);
+		
+        rbp1.setSelected(true);
+        
 		ImageIcon icon1 = new ImageIcon("P1.jpg"); 
 		JLabel p1Label = new JLabel();
 		p1Label.setIcon(icon1);
@@ -513,6 +534,8 @@ public class GameWindow extends WindowAdapter{
                 } else if (rbp3.isSelected()){
                 	setPlayerSelected(3);
                 }
+            	
+            	drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 1);
             }
         });
         characterSelect.add(btnGo);
