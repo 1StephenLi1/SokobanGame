@@ -123,6 +123,10 @@ public class GameMap {
 		return player;
 	}
 	
+	public ArrayList<String> getMaps() {
+	    return this.maps;
+	}
+	
 	/**
 	 * @return A 2D token array storing the map information.
 	 */

@@ -9,9 +9,11 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -25,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
+import javax.swing.Timer;
 
 /**
  * The Class GameWindow.
@@ -74,6 +77,7 @@ public class GameWindow extends WindowAdapter{
         LEFT = "LEFT",
         RIGHT = "RIGHT",
         RESTART = "RESTART",
+        MULTIP = "MULTIP",
         END = "END";
     
     /** The frame. */
@@ -259,7 +263,16 @@ public class GameWindow extends WindowAdapter{
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 1);
+                drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 2);
+            } else if (temp.getName().equals(MULTIP)) {
+            	 try {
+                     String file = "map1" + ".txt";	//map1 is for multi-player
+                     gmInGW.readMap(file);
+                 } catch (IOException e1) {
+                     e1.printStackTrace();
+                 }
+                 drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 2);
+                 System.out.println("Please Click 'Next' to Start a Game");
             } else if (temp.getName().equals(END)) {
                 System.exit(0);
             }
@@ -291,9 +304,6 @@ public class GameWindow extends WindowAdapter{
         menu.add(thumb);
     }
     
-    /**
-     * This initialises level selection.
-     */
     private void initialiseLevelSelection() {
         levelSelection.setSize(WDWWIDTH, WDWHEIGHT);
         levelSelection.setBackground(Color.DARK_GRAY);
@@ -312,6 +322,9 @@ public class GameWindow extends WindowAdapter{
         JLabel musicSelect = LabelForSelection("Select Music:",80,210,20);
         levelSelection.add(musicSelect);
         
+        JLabel modeSelect = LabelForSelection("Select Mode:",80,280,20);
+        levelSelection.add(modeSelect);
+        
         JComboBox<String> comboBox = new JComboBox<String>();
         comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Campaign", "Bonus Levels"}));
         comboBox.setBounds(250, 100, BTNWIDTH+20, BTNHEIGHT);
@@ -329,13 +342,31 @@ public class GameWindow extends WindowAdapter{
             }
         });
         
-        JButton btnNext = initMenuButton(NEXT, 250, 280, "N", "ENTER");
+        JButton btnNext = initMenuButton(NEXT, 220, 360, "N", "ENTER");
         levelSelection.add(btnNext);
         
+        ButtonGroup  nump = new ButtonGroup ();
+        JRadioButton mp = new JRadioButton("Multiplayer");
+        JRadioButton sp = new JRadioButton("Single Player");
+        
+        nump.add(mp);
+        nump.add(sp);
+        mp.setName("Multiplayer");
+        sp.setName("Single Player");   
+        mp.setBounds(250, 310, LBLWIDTH, BTNHEIGHT);
+        sp.setBounds(250, 280, LBLWIDTH, BTNHEIGHT);
+        mp.setBackground(Color.DARK_GRAY);
+        mp.setForeground(Color.WHITE);
+        sp.setBackground(Color.DARK_GRAY);
+        sp.setForeground(Color.WHITE);
+        sp.setSelected(true);
+        levelSelection.add(mp);
+        levelSelection.add(sp);
+       
       //making the radio Button and the confirm button
         ButtonGroup  c = new ButtonGroup ();
-        JRadioButton c1 = new JRadioButton("on");
-        JRadioButton c2 = new JRadioButton("off");
+        JRadioButton c1 = new JRadioButton("On");
+        JRadioButton c2 = new JRadioButton("Off");
         
         c.add(c1);
         c.add(c2);
@@ -378,11 +409,33 @@ public class GameWindow extends WindowAdapter{
                 }else if(c2.isSelected()){
                     System.out.println("music off");
                     bgm.stop();
+                } 
+                
+                if (mp.isSelected()) {
+                    gmInGW.getMaps().clear();
+                    ArrayList<String> maps = gmInGW.getMaps();
+                    maps.add("map7.txt");
+                    maps.add("map8.txt");
+                    maps.add("map9.txt");
+                    maps.add("map10.txt");
+                    maps.add("map11.txt");
+                    maps.add("map12.txt");
+                    try {
+                        gmInGW.readMap("map7.txt");
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 2);
+                    //System.out.println("Please Click 'Next' to Start a Game");
+                } else if (sp.isSelected()) {
+                     //frame.setSize(WDWWIDTH,WDWHEIGHT);
+                     //frame.setLocationRelativeTo(null);
+                     //cl.show(panelCards, "6");
                 }
             }
         });
     }
-    
+
     /**
      * The action is required by actionmap for the level panel.
      * This class is used to bind keyboard input to functions which
@@ -420,63 +473,62 @@ public class GameWindow extends WindowAdapter{
         @Override
         public void actionPerformed(ActionEvent e) {
             boolean changed = false;
-            int face = 0;   //1: face up, 2: face down, 3: face left, 4: face right
             switch (key) {
             case "W":
             	if (gm.getSecondPlayer().moveUp(gm)) {
+            	    gm.getSecondPlayer().setFace(2);
                     changed = true;
-                    face = 1;
                 }
                 break;
             case "D":
             	if (gm.getSecondPlayer().moveRight(gm)) {
+            	    gm.getSecondPlayer().setFace(3);
                     changed = true;
-                    face = 4;
                 }
                 break;
             case "A":
             	if (gm.getSecondPlayer().moveLeft(gm)) {
+            	    gm.getSecondPlayer().setFace(4);
                     changed = true;
-                    face = 3;
                 }
                 break;
             case "S":
             	if (gm.getSecondPlayer().moveDown(gm)) {
+            	    gm.getSecondPlayer().setFace(1);
                     changed = true;
-                    face = 2;
                 }
                 break;
             case UP: 
                 if (gm.getPlayer().moveUp(gm)) {
+                    gm.getPlayer().setFace(2);
                     changed = true;
-                    face = 1;
                 }
                 break;
             case DOWN: 
                 if (gm.getPlayer().moveDown(gm)) {
+                    gm.getPlayer().setFace(3);
                     changed = true;
-                    face = 2;
                 }
                 break;
             case LEFT: 
                 if (gm.getPlayer().moveLeft(gm)){
+                    gm.getPlayer().setFace(4);
                     changed = true;
-                    face = 3;
                 } 
                 break;
             case RIGHT: 
                 if (gm.getPlayer().moveRight(gm)) {
+                    gm.getPlayer().setFace(1);
                     changed = true;
-                    face = 4;
                 }
                 break;
             }
-            if (changed && face != 0) gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),face);
+            if (changed) gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),1);
             if (gm.getNumGoals()==0){
                 gw.level.removeAll();
                 gw.initialiseLevelOne(gm);
                 if (gm.loadNextLevel()) {
-                    gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),face);
+                    gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),1);
                 } else {
                     gw.initialiseWinScreen();
                     gw.cl.show(gw.panelCards, "5");
@@ -495,6 +547,8 @@ public class GameWindow extends WindowAdapter{
         level.setSize(WDWWIDTH, WDWHEIGHT);
         initTitle(gm.getCurrLevel());
         level.setBackground(Color.DARK_GRAY);
+        
+
         
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke("W"), "W");
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke("A"), "A");
@@ -695,19 +749,19 @@ public class GameWindow extends WindowAdapter{
                     }
                 } else if (map[i][j].getType()=='W') {
                     initToken(j, i, dimension, WALL);
-                } else if (map[i][j].getType()=='P' && face == 1) {
+                } else if (map[i][j].getType()=='P' && ((Player) map[i][j]).getFace() == 1) {
                 	if (getPlayerSelected()==1)	initToken(j, i, dimension, PLAYERUP);
                 	else if (getPlayerSelected()==2)	initToken(j, i, dimension, PLAYERUP2);
                 	else if (getPlayerSelected()==3)	initToken(j, i, dimension, PLAYERUP3);
-                } else if (map[i][j].getType()=='P' && face == 2) {
+                } else if (map[i][j].getType()=='P' && ((Player) map[i][j]).getFace() == 2) {
                 	if (getPlayerSelected()==1)	initToken(j, i, dimension, PLAYERDOWN);
                 	else if (getPlayerSelected()==2)	initToken(j, i, dimension, PLAYERDOWN2);
                 	else if (getPlayerSelected()==3)	initToken(j, i, dimension, PLAYERDOWN3);
-                } else if (map[i][j].getType()=='P' && face == 3) {
+                } else if (map[i][j].getType()=='P' && ((Player) map[i][j]).getFace() == 3) {
                 	if (getPlayerSelected()==1)	initToken(j, i, dimension, PLAYERLEFT);
                 	else if (getPlayerSelected()==2)	initToken(j, i, dimension, PLAYERLEFT2);
                 	else if (getPlayerSelected()==3)	initToken(j, i, dimension, PLAYERLEFT3);
-                } else if (map[i][j].getType()=='P' && face == 4) {
+                } else if (map[i][j].getType()=='P' && ((Player) map[i][j]).getFace() == 4) {
                 	if (getPlayerSelected()==1)	initToken(j, i, dimension, PLAYERRIGHT);
                 	else if (getPlayerSelected()==2)	initToken(j, i, dimension, PLAYERRIGHT2);
                 	else if (getPlayerSelected()==3)	initToken(j, i, dimension, PLAYERRIGHT3);
@@ -719,6 +773,30 @@ public class GameWindow extends WindowAdapter{
         }
         JButton restart = initMenuButton(RESTART, 10, 10, "R", "ENTER");
         level.add(restart);
+        JLabel lblTime = new JLabel("00:00:00");
+        lblTime.setFont(new Font("Courier", Font.BOLD, 30));
+        lblTime.setForeground(Color.RED);
+        lblTime.setBorder(BorderFactory.createEmptyBorder());
+        lblTime.setBounds(40, 50,300, 50);
+        level.add(lblTime);
+        
+        JButton start = new JButton("Start");
+        start.addActionListener(new ActionListener() {
+        	
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Timer t = new Timer(1000, new ActionListener(){
+						public void actionPerformed(ActionEvent e) {
+							SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+							lblTime .setText(sdf.format(new java.util.Date()));
+						}
+					});
+					t.start();
+				}
+        });
+        start.setBounds(96, 132, 89, 23);
+        level.add(start);
         level.revalidate();
         level.repaint();
     }

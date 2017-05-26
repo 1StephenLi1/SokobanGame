@@ -3,149 +3,159 @@
  * It extends the token class
  * The position of the player is stored via Cartesian coordinates
  */
-public class Player extends Token {	
-	private boolean onGoal = false;
-	private boolean second = false;
-	
-	public boolean isSecond() {
-		return second;
-	}
+public class Player extends Token { 
+    private boolean onGoal = false;
+    private boolean second = false;
+    private int face ;
 
-	public void setSecond(boolean second) {
-		this.second = second;
-	}
+    public int getFace() {
+        return face;
+    }
 
-	/**
-	*
-	* This constructor creates a {@code Player} at the specified
-	* Cartesian coordinates. The coordinates are integers.
-	*/
-	public Player(int x, int y) {
-		super(x, y, 'P');
-	}
-	
-	/**
-	 * 
-	 * @return a boolean if the player is on a goal
-	 */
-	public boolean isOnGoal(){
-		return onGoal;
-	}
-	
-	/**
-	 * set player status to be on the goal
-	 */
-	public void setOnGoal(boolean onGoal) {
-		this.onGoal = onGoal;
-	}
+    public void setFace(int f) {
+        face = f;
+    }
+    
+    public boolean isSecond() {
+        return second;
+    }
 
-	/**
-	* Moves the player up in the 2d array map if the move is valid
-	* (must check if there is a wall or if there is a non-pushable box)
-	*/
-	public boolean moveUp(GameMap map) {
-		int row = this.getRow();
-		int col = this.getColumn();
-		System.out.println();
-		
-		boolean moveValid = makeMove(map, row, col, row-1, col, row-2, col);
-		if (moveValid == true){
-			this.setRow(row-1);
-			System.out.println("Move Valid. Moving up...");
-		} else {
-			System.out.println("Move not valid. Not moving.");
-			return false;
-		}
-		
-		System.out.println("Player current coordinates: ("+ row +", "+ col +")");
-		System.out.println("Player result coordinates: ("+ this.getRow() +", "+ this.getColumn() +")");
-		
-		return moveValid;
-	}
-	
+    public void setSecond(boolean second) {
+        this.second = second;
+    }
 
-	/**
-	* Moves the player down in the 2d array map if the move is valid 
-	* (must check if there is a wall or if there is a non-pushable box)
-	*/
-	public boolean moveDown(GameMap map) {
-		int row = this.getRow();
-		int col = this.getColumn();
-		System.out.println();
-		
-		boolean moveValid = makeMove(map, row, col, row+1, col, row+2, col);
-		if (moveValid == true){
-			this.setRow(row+1);
-			System.out.println("Move Valid. Moving down...");
-		} else {
-			System.out.println("Move not valid. Not moving.");
-			return false;
-		}
-		
-		System.out.println("Player current coordinates: ("+ row +", "+ col +")");
-        System.out.println("Player result coordinates: ("+ this.getRow() +", "+ this.getColumn() +")");
-		
-		return moveValid;
-	}
+    /**
+    *
+    * This constructor creates a {@code Player} at the specified
+    * Cartesian coordinates. The coordinates are integers.
+    */
+    public Player(int x, int y) {
+        super(x, y, 'P');
+        face = 2;
+    }
+    
+    /**
+     * 
+     * @return a boolean if the player is on a goal
+     */
+    public boolean isOnGoal(){
+        return onGoal;
+    }
+    
+    /**
+     * set player status to be on the goal
+     */
+    public void setOnGoal(boolean onGoal) {
+        this.onGoal = onGoal;
+    }
 
-
-	/**
-	*
-	* Moves the player left in the 2d array map if the move is valid 
-	* (must check if there is a wall or if there is a non-pushable box)
-	*/
-	public boolean moveLeft(GameMap map) {
-		int row = this.getRow();
-		int col = this.getColumn();
-		System.out.println();
-
-		boolean moveValid = makeMove(map, row, col, row, col-1, row, col-2);
-		if (moveValid == true){
-			this.setColumn(col-1);
-			System.out.println("Move Valid. Moving left...");
-		} else {
-		    System.out.println("Move not valid. Not moving.");
+    /**
+    * Moves the player up in the 2d array map if the move is valid
+    * (must check if there is a wall or if there is a non-pushable box)
+    */
+    public boolean moveUp(GameMap map) {
+        int row = this.getRow();
+        int col = this.getColumn();
+        System.out.println();
+        
+        boolean moveValid = makeMove(map, row, col, row-1, col, row-2, col);
+        if (moveValid == true){
+            this.setRow(row-1);
+            System.out.println("Move Valid. Moving up...");
+        } else {
+            System.out.println("Move not valid. Not moving.");
             return false;
         }
         
         System.out.println("Player current coordinates: ("+ row +", "+ col +")");
         System.out.println("Player result coordinates: ("+ this.getRow() +", "+ this.getColumn() +")");
-		
-		return moveValid;
-	}
+        
+        return moveValid;
+    }
+    
 
-
-	/**
-	* Moves the player right in the 2d array map if the move is valid 
-	* (must check if there is a wall or if there is a non-pushable box)
-	*/
-	public boolean moveRight(GameMap map) {
-		int row = this.getRow();
-		int col = this.getColumn();
-		System.out.println();
-
-		boolean moveValid = makeMove(map, row, col, row, col+1, row, col+2);
-		if (moveValid == true){
-			this.setColumn(col+1);
-			System.out.println("Move Valid. Moving right...");
-		} else {
-		    System.out.println("Move not valid. Not moving.");
+    /**
+    * Moves the player down in the 2d array map if the move is valid 
+    * (must check if there is a wall or if there is a non-pushable box)
+    */
+    public boolean moveDown(GameMap map) {
+        int row = this.getRow();
+        int col = this.getColumn();
+        System.out.println();
+        
+        boolean moveValid = makeMove(map, row, col, row+1, col, row+2, col);
+        if (moveValid == true){
+            this.setRow(row+1);
+            System.out.println("Move Valid. Moving down...");
+        } else {
+            System.out.println("Move not valid. Not moving.");
             return false;
         }
         
         System.out.println("Player current coordinates: ("+ row +", "+ col +")");
         System.out.println("Player result coordinates: ("+ this.getRow() +", "+ this.getColumn() +")");
-		
-		return moveValid;
-	}
+        
+        return moveValid;
+    }
 
-	/**
-	* attempts to move the player to the requested index (rowNext, colNext).
-	* rowNNext, and colNNext store the index of the cell adjacent to the players destination
-	* this is needed to validate moves, as if there is a wall for example, although
-	* players can push boxes, boxes cannot push walls, and so the move would be invalidated
-	* and the function will return false.
-	*/
+
+    /**
+    *
+    * Moves the player left in the 2d array map if the move is valid 
+    * (must check if there is a wall or if there is a non-pushable box)
+    */
+    public boolean moveLeft(GameMap map) {
+        int row = this.getRow();
+        int col = this.getColumn();
+        System.out.println();
+
+        boolean moveValid = makeMove(map, row, col, row, col-1, row, col-2);
+        if (moveValid == true){
+            this.setColumn(col-1);
+            System.out.println("Move Valid. Moving left...");
+        } else {
+            System.out.println("Move not valid. Not moving.");
+            return false;
+        }
+        
+        System.out.println("Player current coordinates: ("+ row +", "+ col +")");
+        System.out.println("Player result coordinates: ("+ this.getRow() +", "+ this.getColumn() +")");
+        
+        return moveValid;
+    }
+
+
+    /**
+    * Moves the player right in the 2d array map if the move is valid 
+    * (must check if there is a wall or if there is a non-pushable box)
+    */
+    public boolean moveRight(GameMap map) {
+        int row = this.getRow();
+        int col = this.getColumn();
+        System.out.println();
+
+        boolean moveValid = makeMove(map, row, col, row, col+1, row, col+2);
+        if (moveValid == true){
+            this.setColumn(col+1);
+            System.out.println("Move Valid. Moving right...");
+        } else {
+            System.out.println("Move not valid. Not moving.");
+            return false;
+        }
+        
+        System.out.println("Player current coordinates: ("+ row +", "+ col +")");
+        System.out.println("Player result coordinates: ("+ this.getRow() +", "+ this.getColumn() +")");
+        
+        return moveValid;
+    }
+
+    /**
+    * attempts to move the player to the requested index (rowNext, colNext).
+    * rowNNext, and colNNext store the index of the cell adjacent to the players destination
+    * this is needed to validate moves, as if there is a wall for example, although
+    * players can push boxes, boxes cannot push walls, and so the move would be invalidated
+    * and the function will return false.
+    */
     public boolean makeMove(GameMap map, int row, int col, int rowNext, int colNext, int rowNNext, int colNNext){
         boolean isValid = true;
         boolean hasBox = false;
@@ -285,5 +295,5 @@ public class Player extends Token {
         }
         return isValid;
     }
-	
+    
 }

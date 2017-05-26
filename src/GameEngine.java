@@ -27,11 +27,17 @@ public class GameEngine extends WindowAdapter{
      * @param args the arguments
      */
     public static void main(String[] args) {
-    	for (int counter = 11; counter <=20 ; counter ++){
+    	for (int counter = 13; counter <=20 ; counter ++){
 			MapGenerator newmap = new MapGenerator();
 			Token[][] map = newmap.createMap(8);
 			char[][] charMap = new char[8][8];
 			charMap = newmap.convertObjectArrayToCharArray(map, charMap);
+			
+			if (map == null) {
+			    counter--;
+			    break;
+			}
+			
 			try
 			{	
 				String filename = "map" + Integer.toString(counter) +".txt";
@@ -50,13 +56,17 @@ public class GameEngine extends WindowAdapter{
 			    System.out.println("No such file exists.");
 			}
 		}
+    	
     	SwingUtilities.invokeLater(() -> {
             try {
                 ArrayList<String> maps = new ArrayList<>();
                 maps.add("map1.txt");
                 maps.add("map2.txt");
                 maps.add("map3.txt");
-                
+                maps.add("map4.txt");
+                maps.add("map5.txt");
+                maps.add("map6.txt");
+
                 GameEngine ge = new GameEngine(maps); //running the game
                 ge.gw.initialiseLevelOne(ge.gm);
                 ge.gw.drawMap(ge.gm.getMap(), ge.gm.getCurrLevel(), ge.gm.getDimension(), 1);  //int parameter sets the starting face of our player
