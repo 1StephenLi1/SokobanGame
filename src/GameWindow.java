@@ -112,8 +112,14 @@ public class GameWindow extends WindowAdapter{
     private final int PLAYERDOWN = 2;
     private final int WALL = 6;
     private final int GBOX = 7;
-    private final int PLAYER2UP = 8; 
-    private final int PLAYER3UP = 9;
+    private final int PLAYERDOWN2 = 8;
+    private final int PLAYERLEFT2 = 9;    
+    private final int PLAYERRIGHT2 = 10;
+    private final int PLAYERUP2 = 11;
+    private final int PLAYERDOWN3 = 12;
+    private final int PLAYERLEFT3 = 13;    
+    private final int PLAYERRIGHT3 = 14;
+    private final int PLAYERUP3 = 15;
 
     
     /**
@@ -166,8 +172,14 @@ public class GameWindow extends WindowAdapter{
         images.add(new ImageIcon("playerup.png"));//5
         images.add(new ImageIcon("wall.png"));//6
         images.add(new ImageIcon("gbox.png"));//7
-        images.add(new ImageIcon("playerup2.jpg"));
-        images.add(new ImageIcon("playerup3.jpg"));
+        images.add(new ImageIcon("playerdown2.png"));//8
+        images.add(new ImageIcon("playerleft2.png"));//9
+        images.add(new ImageIcon("playerright2.png"));//10
+        images.add(new ImageIcon("playerup2.png"));//11
+        images.add(new ImageIcon("playerdown3.png"));//12
+        images.add(new ImageIcon("playerleft3.png"));//13
+        images.add(new ImageIcon("playerright3.png"));//14
+        images.add(new ImageIcon("playerup3.png"));//15
     }
     /**
      * This is just a container for an action, to obtain the focus of a button.
@@ -272,7 +284,7 @@ public class GameWindow extends WindowAdapter{
         label.setBounds(70, 50, LBLWIDTH, LBLHEIGHT);
         menu.add(label);
         
-        ImageIcon icon = new ImageIcon("mario.jpg"); 
+        ImageIcon icon = new ImageIcon("BG_welcomePage.jpg"); 
         JLabel thumb = new JLabel();
         thumb.setIcon(icon);
         thumb.setBounds(0,0,500,500);
@@ -410,6 +422,30 @@ public class GameWindow extends WindowAdapter{
             boolean changed = false;
             int face = 0;   //1: face up, 2: face down, 3: face left, 4: face right
             switch (key) {
+            case "W":
+            	if (gm.getSecondPlayer().moveUp(gm)) {
+                    changed = true;
+                    face = 1;
+                }
+                break;
+            case "D":
+            	if (gm.getSecondPlayer().moveRight(gm)) {
+                    changed = true;
+                    face = 4;
+                }
+                break;
+            case "A":
+            	if (gm.getSecondPlayer().moveLeft(gm)) {
+                    changed = true;
+                    face = 3;
+                }
+                break;
+            case "S":
+            	if (gm.getSecondPlayer().moveDown(gm)) {
+                    changed = true;
+                    face = 2;
+                }
+                break;
             case UP: 
                 if (gm.getPlayer().moveUp(gm)) {
                     changed = true;
@@ -460,10 +496,18 @@ public class GameWindow extends WindowAdapter{
         initTitle(gm.getCurrLevel());
         level.setBackground(Color.DARK_GRAY);
         
+        level.getInputMap(IFW).put(KeyStroke.getKeyStroke("W"), "W");
+        level.getInputMap(IFW).put(KeyStroke.getKeyStroke("A"), "A");
+        level.getInputMap(IFW).put(KeyStroke.getKeyStroke("S"), "S");
+        level.getInputMap(IFW).put(KeyStroke.getKeyStroke("D"), "D");
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke(UP), UP);
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke(DOWN), DOWN);
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke(LEFT), LEFT);        
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke(RIGHT), RIGHT);
+        level.getActionMap().put("W", new move(gm, this, "W"));
+        level.getActionMap().put("A", new move(gm, this, "A"));
+        level.getActionMap().put("S", new move(gm, this, "S"));
+        level.getActionMap().put("D", new move(gm, this, "D"));
         level.getActionMap().put(UP, new move(gm, this, UP));
         level.getActionMap().put(DOWN, new move(gm, this, DOWN));
         level.getActionMap().put(LEFT, new move(gm, this, LEFT));
@@ -512,13 +556,13 @@ public class GameWindow extends WindowAdapter{
 		p1Label.setBounds(14, 117, 137, 196);
 		characterSelect.add(p1Label);
 		
-		ImageIcon icon2 = new ImageIcon("P2.jpg"); 
+		ImageIcon icon2 = new ImageIcon("P2.png"); 
 		JLabel p2Label = new JLabel();
 		p2Label.setIcon(icon2);
 		p2Label.setBounds(177, 117, 143, 196);
 		characterSelect.add(p2Label);
 		
-		ImageIcon icon3 = new ImageIcon("P3.jpg"); 
+		ImageIcon icon3 = new ImageIcon("P3.png"); 
 		JLabel p3Label = new JLabel();
 		p3Label.setIcon(icon3);
 		p3Label.setBounds(334, 117, 134, 196);
@@ -651,18 +695,22 @@ public class GameWindow extends WindowAdapter{
                     }
                 } else if (map[i][j].getType()=='W') {
                     initToken(j, i, dimension, WALL);
-                } else if (map[i][j].getType()=='P'&& getPlayerSelected()==2) {
-                    initToken(j, i, dimension, PLAYER2UP);
-                } else if (map[i][j].getType()=='P'&& getPlayerSelected()==3) {
-                    initToken(j, i, dimension, PLAYER3UP);
-                } else if (map[i][j].getType()=='P' && face == 1 && getPlayerSelected()==1) {
-                    initToken(j, i, dimension, PLAYERUP);
-                } else if (map[i][j].getType()=='P' && face == 2 && getPlayerSelected()==1) {
-                    initToken(j, i, dimension, PLAYERDOWN);
-                } else if (map[i][j].getType()=='P' && face == 3 && getPlayerSelected()==1) {
-                    initToken(j, i, dimension, PLAYERLEFT);
-                } else if (map[i][j].getType()=='P' && face == 4 && getPlayerSelected()==1) {
-                    initToken(j, i, dimension, PLAYERRIGHT);
+                } else if (map[i][j].getType()=='P' && face == 1) {
+                	if (getPlayerSelected()==1)	initToken(j, i, dimension, PLAYERUP);
+                	else if (getPlayerSelected()==2)	initToken(j, i, dimension, PLAYERUP2);
+                	else if (getPlayerSelected()==3)	initToken(j, i, dimension, PLAYERUP3);
+                } else if (map[i][j].getType()=='P' && face == 2) {
+                	if (getPlayerSelected()==1)	initToken(j, i, dimension, PLAYERDOWN);
+                	else if (getPlayerSelected()==2)	initToken(j, i, dimension, PLAYERDOWN2);
+                	else if (getPlayerSelected()==3)	initToken(j, i, dimension, PLAYERDOWN3);
+                } else if (map[i][j].getType()=='P' && face == 3) {
+                	if (getPlayerSelected()==1)	initToken(j, i, dimension, PLAYERLEFT);
+                	else if (getPlayerSelected()==2)	initToken(j, i, dimension, PLAYERLEFT2);
+                	else if (getPlayerSelected()==3)	initToken(j, i, dimension, PLAYERLEFT3);
+                } else if (map[i][j].getType()=='P' && face == 4) {
+                	if (getPlayerSelected()==1)	initToken(j, i, dimension, PLAYERRIGHT);
+                	else if (getPlayerSelected()==2)	initToken(j, i, dimension, PLAYERRIGHT2);
+                	else if (getPlayerSelected()==3)	initToken(j, i, dimension, PLAYERRIGHT3);
                 } 
                 else if (map[i][j].getType()=='G') {
                     initToken(j, i, dimension, GOAL);

@@ -5,7 +5,16 @@
  */
 public class Player extends Token {	
 	private boolean onGoal = false;
+	private boolean second = false;
 	
+	public boolean isSecond() {
+		return second;
+	}
+
+	public void setSecond(boolean second) {
+		this.second = second;
+	}
+
 	/**
 	*
 	* This constructor creates a {@code Player} at the specified
@@ -143,7 +152,7 @@ public class Player extends Token {
         Token[][] mapLayout = map.getMap();
         
         // check if there's a wall next to player
-        if (mapLayout[rowNext][colNext] instanceof Wall){
+        if (mapLayout[rowNext][colNext] instanceof Wall || mapLayout[rowNext][colNext] instanceof Player){
             isValid = false;
         } 
         

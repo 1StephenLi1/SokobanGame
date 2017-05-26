@@ -100,6 +100,26 @@ public class GameMap {
 	 * @return the player object on the map
 	 */
 	public Player getPlayer() {
+		player = null;
+		for(Token i[]: map) {
+            for(Token j: i) {
+                if (j instanceof Player && ((Player) j).isSecond()==false){
+                	player = (Player) j;
+                }
+            }
+		}
+		return player;
+	}
+	
+	public Player getSecondPlayer() {
+		player = null;
+		for(Token i[]: map) {
+            for(Token j: i) {
+                if (j instanceof Player && ((Player) j).isSecond()==true){
+                	player = (Player) j;
+                }
+            }
+		}
 		return player;
 	}
 	
@@ -151,8 +171,9 @@ public class GameMap {
 						
 						} else if(command[tempColumn].equals("B")){
 							map[tempRow][tempColumn] = new Box(tempRow,tempColumn);
-						} else if(command[tempColumn].equals("P")){
+						} else if(command[tempColumn].equals("P")||command[tempColumn].equals("Q")){
 							player = new Player(tempRow,tempColumn);
+							if(command[tempColumn].equals("Q"))	player.setSecond(true);
 							map[tempRow][tempColumn] = player;
 						} else if(command[tempColumn].equals("G")){
 							map[tempRow][tempColumn] = new Goal(tempRow,tempColumn);
