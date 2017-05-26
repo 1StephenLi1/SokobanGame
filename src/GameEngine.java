@@ -1,5 +1,6 @@
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
@@ -26,7 +27,30 @@ public class GameEngine extends WindowAdapter{
      * @param args the arguments
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
+    	for (int counter = 11; counter <=20 ; counter ++){
+			MapGenerator newmap = new MapGenerator();
+			Token[][] map = newmap.createMap(8);
+			char[][] charMap = new char[8][8];
+			charMap = newmap.convertObjectArrayToCharArray(map, charMap);
+			try
+			{	
+				String filename = "map" + Integer.toString(counter) +".txt";
+			    PrintWriter pr = new PrintWriter(filename);    
+			    pr.println("r8");
+			    pr.println("c8");
+			    for (int i=0; i<charMap.length ; i++)
+			    {
+			        pr.println(charMap[i]);
+			    }
+			    pr.close();
+			}
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			    System.out.println("No such file exists.");
+			}
+		}
+    	SwingUtilities.invokeLater(() -> {
             try {
                 ArrayList<String> maps = new ArrayList<>();
                 maps.add("map1.txt");
