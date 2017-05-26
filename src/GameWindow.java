@@ -611,8 +611,7 @@ public class GameWindow extends WindowAdapter{
         characterSelect.setBackground(Color.DARK_GRAY);
         
         ButtonGroup c = new ButtonGroup ();
-        
-        
+                
         JRadioButton rbp1 = new JRadioButton("");
 		rbp1.setBounds(68, 333, 70, 31);
 		rbp1.setBackground(Color.DARK_GRAY);
