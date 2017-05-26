@@ -31,7 +31,7 @@ public class Player extends Token {
     */
     public Player(int x, int y) {
         super(x, y, 'P');
-        face = 2;
+        face = 1;
     }
     
     /**
@@ -170,7 +170,8 @@ public class Player extends Token {
         // and check if there's another box or a wall next to that box
         if (mapLayout[rowNext][colNext] instanceof Box){
             hasBox = true;
-            if (mapLayout[rowNNext][colNNext] instanceof Box || mapLayout[rowNNext][colNNext] instanceof Wall){
+            Object next = mapLayout[rowNNext][colNNext];
+            if (next instanceof Box || next instanceof Wall || next instanceof Player ){
                 isValid = false;
             }
         } 

@@ -61,9 +61,12 @@ public class GameWindow extends WindowAdapter{
     /** use of GameMap class */
     private GameMap gmInGW;
     
-    /** index of player */
+    /** determines which icon to draw */
     private int playerSelected;
 
+    /** 0 = sp, 1 = mp, 2 = bonus */
+    private int mode;
+    
 	/** The Constant GO. */
     private static final String
         HOVER = "HOVER",
@@ -110,16 +113,20 @@ public class GameWindow extends WindowAdapter{
     private ArrayList<ImageIcon> images;
     private final int BOX = 0;
     private final int GOAL = 1;
-    private final int PLAYERUP = 5;
+    
+    private final int PLAYERDOWN = 2;
     private final int PLAYERLEFT = 3;
     private final int PLAYERRIGHT = 4;
-    private final int PLAYERDOWN = 2;
+    private final int PLAYERUP = 5;
+    
     private final int WALL = 6;
     private final int GBOX = 7;
+    
     private final int PLAYERDOWN2 = 8;
     private final int PLAYERLEFT2 = 9;    
     private final int PLAYERRIGHT2 = 10;
     private final int PLAYERUP2 = 11;
+    
     private final int PLAYERDOWN3 = 12;
     private final int PLAYERLEFT3 = 13;    
     private final int PLAYERRIGHT3 = 14;
@@ -258,12 +265,20 @@ public class GameWindow extends WindowAdapter{
                 cl.show(panelCards, "3");
             } else if (temp.getName().equals(RESTART)){
                 try {
-                    String file = "map" + Integer.toString(gmInGW.getCurrLevel()+1) +".txt";
+                    int shift = 0;
+                    int mp = 6;
+                    int bonus = 12;
+                    if (mode == 2) {
+                        shift = bonus;
+                    } else if (mode == 1) {
+                        shift = mp;
+                    }
+                    String file = "map" + Integer.toString(gmInGW.getCurrLevel()+1+shift) +".txt";
                     gmInGW.readMap(file);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 2);
+                drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension());
             } else if (temp.getName().equals(MULTIP)) {
             	 try {
                      String file = "map1" + ".txt";	//map1 is for multi-player
@@ -271,7 +286,7 @@ public class GameWindow extends WindowAdapter{
                  } catch (IOException e1) {
                      e1.printStackTrace();
                  }
-                 drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 2);
+                 drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension());
                  System.out.println("Please Click 'Next' to Start a Game");
             } else if (temp.getName().equals(END)) {
                 System.exit(0);
@@ -330,11 +345,14 @@ public class GameWindow extends WindowAdapter{
         comboBox.setBounds(250, 100, BTNWIDTH+20, BTNHEIGHT);
         levelSelection.add(comboBox);
         System.out.println("You selected Campaign");
+        mode = 0;
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if(comboBox.getSelectedItem() == "Campaign") {
+                if (comboBox.getSelectedItem() == "Campaign") {
                     System.out.println("You selected Campaign");
+                    mode = 0;
                 } else if(comboBox.getSelectedItem() == "Bonus") {
+                    mode = 2;
                     System.out.println("You selected Bonus");
                     gmInGW.getMaps().clear();
                     ArrayList<String> maps = gmInGW.getMaps();
@@ -351,7 +369,7 @@ public class GameWindow extends WindowAdapter{
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
-                    drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 2);
+                    drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension());
                 }
             }
         });
@@ -429,6 +447,7 @@ public class GameWindow extends WindowAdapter{
                 } 
                 
                 if (mp.isSelected()) {
+                    mode = 1;
                     gmInGW.getMaps().clear();
                     ArrayList<String> maps = gmInGW.getMaps();
                     maps.add("map7.txt");
@@ -442,7 +461,7 @@ public class GameWindow extends WindowAdapter{
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
-                    drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 2);
+                    drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension());
                     //System.out.println("Please Click 'Next' to Start a Game");
                 } else if (sp.isSelected()) {
                      //frame.setSize(WDWWIDTH,WDWHEIGHT);
@@ -493,59 +512,61 @@ public class GameWindow extends WindowAdapter{
             switch (key) {
             case "W":
             	if (gm.getSecondPlayer().moveUp(gm)) {
-            	    gm.getSecondPlayer().setFace(2);
+            	    gm.getSecondPlayer().setFace(1);
+                    changed = true;
+                }
+                break;
+            case "S":
+                if (gm.getSecondPlayer().moveDown(gm)) {
+                    gm.getSecondPlayer().setFace(2);
+                    changed = true;
+                }
+                break;
+            case "A":
+                if (gm.getSecondPlayer().moveLeft(gm)) {
+                    gm.getSecondPlayer().setFace(3);
                     changed = true;
                 }
                 break;
             case "D":
             	if (gm.getSecondPlayer().moveRight(gm)) {
-            	    gm.getSecondPlayer().setFace(3);
-                    changed = true;
-                }
-                break;
-            case "A":
-            	if (gm.getSecondPlayer().moveLeft(gm)) {
             	    gm.getSecondPlayer().setFace(4);
                     changed = true;
                 }
                 break;
-            case "S":
-            	if (gm.getSecondPlayer().moveDown(gm)) {
-            	    gm.getSecondPlayer().setFace(1);
-                    changed = true;
-                }
-                break;
+            
+            
             case UP: 
                 if (gm.getPlayer().moveUp(gm)) {
-                    gm.getPlayer().setFace(2);
+                    gm.getPlayer().setFace(1);
                     changed = true;
                 }
                 break;
             case DOWN: 
                 if (gm.getPlayer().moveDown(gm)) {
-                    gm.getPlayer().setFace(3);
+                    gm.getPlayer().setFace(2);
                     changed = true;
                 }
                 break;
             case LEFT: 
                 if (gm.getPlayer().moveLeft(gm)){
-                    gm.getPlayer().setFace(4);
+                    gm.getPlayer().setFace(3);
                     changed = true;
                 } 
                 break;
             case RIGHT: 
                 if (gm.getPlayer().moveRight(gm)) {
-                    gm.getPlayer().setFace(1);
+                    gm.getPlayer().setFace(4);
                     changed = true;
                 }
                 break;
             }
-            if (changed) gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),1);
+            if (changed) gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension());
             if (gm.getNumGoals()==0){
                 gw.level.removeAll();
                 gw.initialiseLevelOne(gm);
                 if (gm.loadNextLevel()) {
-                    gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension(),1);
+                    gw.drawMap(gm.getMap(), gm.getCurrLevel(), gm.getDimension());
                 } else {
                     gw.initialiseWinScreen();
                     gw.cl.show(gw.panelCards, "5");
@@ -650,7 +671,7 @@ public class GameWindow extends WindowAdapter{
                 	setPlayerSelected(3);
                 }
             	
-            	drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 1);
+            	drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension());
             }
         });
         characterSelect.add(btnGo);
@@ -750,7 +771,7 @@ public class GameWindow extends WindowAdapter{
      * @param g the GameMap which contains the map data
      * @param gw the GameWindow on which the map is to be rendered
      */
-    public void drawMap (Token[][] map, int currLevel, int dimension, int face) {
+    public void drawMap (Token[][] map, int currLevel, int dimension) {
         level.removeAll();
         initTitle(currLevel);
         for (int i = 0; i < dimension; i++) {

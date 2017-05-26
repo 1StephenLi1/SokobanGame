@@ -50,8 +50,7 @@ public class GameEngine extends WindowAdapter{
 			    }
 			    pr.close();
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 			    e.printStackTrace();
 			    System.out.println("No such file exists.");
 			}
@@ -69,7 +68,7 @@ public class GameEngine extends WindowAdapter{
 
                 GameEngine ge = new GameEngine(maps); //running the game
                 ge.gw.initialiseLevelOne(ge.gm);
-                ge.gw.drawMap(ge.gm.getMap(), ge.gm.getCurrLevel(), ge.gm.getDimension(), 1);  //int parameter sets the starting face of our player
+                ge.gw.drawMap(ge.gm.getMap(), ge.gm.getCurrLevel(), ge.gm.getDimension()); 
                 
             } catch (Exception e) {
                 e.printStackTrace();
