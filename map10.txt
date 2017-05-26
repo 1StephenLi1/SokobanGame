@@ -1,16 +1,10 @@
-r14
-c14
-    WWWWWWWW  
-  WWW  W   W  
-WWW B  B W WWW
-W   W BBW    W
-WPB     WBWW W
-WW BWWWBB    W
- WW  WW WB   W
-  WWGGG W BW W
-   WGGGGGW B W
-   WWGGGGG   W
-    WWWW WB WW
-       W    W  
-       W   WW 
-       WWWWW  
+r8
+c8
+WWWWWWWW
+W   Q  W
+W W WBGW
+W    BGW
+W W  BGW
+W   W  W
+WWWWWP W
+    WWWW

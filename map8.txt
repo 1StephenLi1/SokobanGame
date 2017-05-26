@@ -1,10 +1,11 @@
-r8
-c8
-   WWWWW
- WWW   W
-WW   WBW
-WW WW  W
-WPB    W
-W  WWB W
-WWWWGGGW
-   WWWWW
+r9
+c9
+  WWWW   
+WWW  WW  
+W GG  WWW
+W     Q W
+W BGB   W
+W       W
+WPB G B W
+W  WW   W
+WWWWWWWWW

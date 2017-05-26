@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -423,38 +421,4 @@ public class MapGenerator {
 		
 	    return randomNum;
 	}
-	
-	
-	public static void main(String[] args) throws IOException{
-		for (int counter = 11; counter <=20 ; counter ++){
-			MapGenerator newmap = new MapGenerator();
-			Token[][] map = newmap.createMap(8);
-			if (newmap.getStatus() == false){
-				counter--;
-				break;
-			}
-			
-			char[][] charMap = new char[8][8];
-			charMap = newmap.convertObjectArrayToCharArray(map, charMap);
-			try
-			{	
-				String filename = "map" + Integer.toString(counter) +".txt";
-			    PrintWriter pr = new PrintWriter(filename);    
-			    pr.println("r8");
-			    pr.println("c8");
-			    for (int i=0; i<charMap.length ; i++)
-			    {
-			        pr.println(charMap[i]);
-			    }
-			    pr.close();
-			}
-			catch (Exception e)
-			{
-			    e.printStackTrace();
-			    System.out.println("No such file exists.");
-			}
-		}
-		
-	}
-	
 }

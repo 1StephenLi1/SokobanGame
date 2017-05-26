@@ -30,6 +30,10 @@ public class GameEngine extends WindowAdapter{
     	for (int counter = 13; counter <=20 ; counter ++){
 			MapGenerator newmap = new MapGenerator();
 			Token[][] map = newmap.createMap(8);
+			if (newmap.getStatus() == false){
+				counter--;
+				break;
+			}
 			char[][] charMap = new char[8][8];
 			charMap = newmap.convertObjectArrayToCharArray(map, charMap);
 			
