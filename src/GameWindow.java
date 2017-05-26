@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -140,7 +139,6 @@ public class GameWindow extends WindowAdapter{
         gmInGW = gm;
         loadAssets();
         frame = new JFrame();
-        //frame.setLayout(null); //Means we set coordinates ourselves i.e. no auto layout => more control
         frame.setSize(WDWWIDTH, WDWHEIGHT); //set frame size to specified width and height
         frame.setLocationRelativeTo(null);
         frame.addWindowListener(this); 
@@ -392,7 +390,7 @@ public class GameWindow extends WindowAdapter{
         levelSelection.add(mp);
         levelSelection.add(sp);
        
-      //making the radio Button and the confirm button
+        //making the radio Button and the confirm button
         ButtonGroup  c = new ButtonGroup ();
         JRadioButton c1 = new JRadioButton("On");
         JRadioButton c2 = new JRadioButton("Off");
@@ -581,10 +579,7 @@ public class GameWindow extends WindowAdapter{
     public void initialiseLevelOne(GameMap gm) {
         level.setSize(WDWWIDTH, WDWHEIGHT);
         initTitle(gm.getCurrLevel());
-        level.setBackground(Color.DARK_GRAY);
-        
-
-        
+        level.setBackground(Color.DARK_GRAY);     
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke("W"), "W");
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke("A"), "A");
         level.getInputMap(IFW).put(KeyStroke.getKeyStroke("S"), "S");
@@ -675,7 +670,7 @@ public class GameWindow extends WindowAdapter{
     }
     
     /**
-     * 
+     * methods to initialise win screen
      */
     public void initialiseWinScreen() {
         winScreen.setSize(WDWWIDTH, WDWHEIGHT);
@@ -808,30 +803,6 @@ public class GameWindow extends WindowAdapter{
         }
         JButton restart = initMenuButton(RESTART, 10, 10, "R", "ENTER");
         level.add(restart);
-        /*
-        JLabel lblTime = new JLabel("00:00:00");
-        lblTime.setFont(new Font("Courier", Font.BOLD, 30));
-        lblTime.setForeground(Color.RED);
-        lblTime.setBorder(BorderFactory.createEmptyBorder());
-        lblTime.setBounds(40, 50,300, 50);
-        level.add(lblTime);
-        
-        JButton start = new JButton("Start");
-        start.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Timer t = new Timer(1000, new ActionListener(){
-						public void actionPerformed(ActionEvent e) {
-							SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-							lblTime .setText(sdf.format(new java.util.Date()));
-						}
-					});
-					t.start();
-				}
-        });
-        start.setBounds(96, 132, 89, 23);
-        level.add(start);
-        */
         level.revalidate();
         level.repaint();
     }

@@ -8,13 +8,11 @@ public class MapGenerator {
 	
 	private Token[][] map = null;
 	private boolean status;
-	
-	
+		
 	public MapGenerator(){
 		
 	}
-	
-	
+		
 	/**
 	 * Gets the status of the map
 	 * @return true if map is generated, and false if otherwise
