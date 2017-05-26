@@ -326,18 +326,32 @@ public class GameWindow extends WindowAdapter{
         levelSelection.add(modeSelect);
         
         JComboBox<String> comboBox = new JComboBox<String>();
-        comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Campaign", "Bonus Levels"}));
+        comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Campaign", "Bonus"}));
         comboBox.setBounds(250, 100, BTNWIDTH+20, BTNHEIGHT);
         levelSelection.add(comboBox);
+        System.out.println("You selected Campaign");
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
-                if(comboBox.getSelectedItem() == "Mario"){
-                    bgm = loadBGM ("bgm1Mario.wav");
-                    System.out.println("You selected song1");
-                }else if(comboBox.getSelectedItem() == "Sonic"){
-                    bgm = loadBGM ("bgm2Sonic.wav");
-                    System.out.println("You selected song2");
+                if(comboBox.getSelectedItem() == "Campaign") {
+                    System.out.println("You selected Campaign");
+                } else if(comboBox.getSelectedItem() == "Bonus") {
+                    System.out.println("You selected Bonus");
+                    gmInGW.getMaps().clear();
+                    ArrayList<String> maps = gmInGW.getMaps();
+                    maps.add("map13.txt");
+                    maps.add("map14.txt");
+                    maps.add("map15.txt");
+                    maps.add("map16.txt");
+                    maps.add("map17.txt");
+                    maps.add("map18.txt");
+                    maps.add("map19.txt");
+                    maps.add("map20.txt");
+                    try {
+                        gmInGW.readMap("map13.txt");
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    drawMap(gmInGW.getMap(), gmInGW.getCurrLevel(), gmInGW.getDimension(), 2);
                 }
             }
         });
@@ -403,6 +417,9 @@ public class GameWindow extends WindowAdapter{
        
         btnNext.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                if (comboBox.getSelectedItem() == "Bonus")
+                    return;
+                
                 if(c1.isSelected()){
                     System.out.println("music on");
                     bgm.loop();
@@ -773,6 +790,7 @@ public class GameWindow extends WindowAdapter{
         }
         JButton restart = initMenuButton(RESTART, 10, 10, "R", "ENTER");
         level.add(restart);
+        /*
         JLabel lblTime = new JLabel("00:00:00");
         lblTime.setFont(new Font("Courier", Font.BOLD, 30));
         lblTime.setForeground(Color.RED);
@@ -782,8 +800,6 @@ public class GameWindow extends WindowAdapter{
         
         JButton start = new JButton("Start");
         start.addActionListener(new ActionListener() {
-        	
-
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Timer t = new Timer(1000, new ActionListener(){
@@ -797,6 +813,7 @@ public class GameWindow extends WindowAdapter{
         });
         start.setBounds(96, 132, 89, 23);
         level.add(start);
+        */
         level.revalidate();
         level.repaint();
     }
