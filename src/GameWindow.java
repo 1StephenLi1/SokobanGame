@@ -296,15 +296,15 @@ public class GameWindow extends WindowAdapter{
      */
     private void initialiseMenu() {
         menu.setSize(WDWWIDTH, WDWHEIGHT);
-        JButton start = initMenuButton(START, 130, 390, "S", "ENTER");
+        JButton start = initMenuButton(START, 360, 340, "S", "ENTER");
         menu.add(start);
         
-        JButton quit = initMenuButton(QUIT, 260, 390, "Q", "ENTER");
+        JButton quit = initMenuButton(QUIT, 360, 390, "Q", "ENTER");
         menu.add(quit);
        
         JLabel label = new JLabel("Warehouse Bros!");
-        label.setFont(new Font("Copperplate", Font.PLAIN, 40));
-        label.setBounds(70, 50, LBLWIDTH, LBLHEIGHT);
+        label.setFont(new Font("Copperplate", Font.PLAIN, 50));
+        label.setBounds(35, 50, LBLWIDTH, LBLHEIGHT);
         menu.add(label);
         
         ImageIcon icon = new ImageIcon("BG_welcomePage.jpg"); 
