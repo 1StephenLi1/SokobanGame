@@ -1,4 +1,4 @@
-Welcome to our COMP2911 integrated repo
+Sokoban Game
 =======================================
-+ All images are in the folder
-+ All files are in the folder
++ Classic sokoban game built by Java
+
